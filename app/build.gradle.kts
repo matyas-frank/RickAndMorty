@@ -64,4 +64,11 @@ dependencies {
     implementation(libs.androidx.room.paging)
 
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.negotiation)
+    implementation(libs.ktor.client.serialization.json)
+    implementation(libs.ktor.client.logging)
+    testImplementation(libs.ktor.client.mock)
 }
