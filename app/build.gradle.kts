@@ -71,4 +71,6 @@ dependencies {
     implementation(libs.ktor.client.serialization.json)
     implementation(libs.ktor.client.logging)
     testImplementation(libs.ktor.client.mock)
+
+    implementation(libs.kotlinx.datetime)
 }
