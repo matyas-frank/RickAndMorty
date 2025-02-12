@@ -23,6 +23,7 @@ import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import cz.frank.rickandmorty.R
+import cz.frank.rickandmorty.root.domain.CharacterSimple
 import cz.frank.rickandmorty.root.ui.theme.RickAndMortyTheme
 import cz.frank.rickandmorty.utils.ui.Space
 import io.github.fornewid.placeholder.foundation.PlaceholderHighlight
@@ -33,7 +34,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun CharacterList(
-    characters: ImmutableList<CharacterUI>,
+    characters: ImmutableList<CharacterSimple>,
     modifier: Modifier = Modifier,
     areCharacterCardsTransparent: Boolean = false
 ) {
@@ -44,16 +45,8 @@ fun CharacterList(
     }
 }
 
-data class CharacterUI(
-    val id: Long,
-    val name: String,
-    val status: String,
-    val imageUrl: String,
-    val isFavorite: Boolean = false
-)
-
 @Composable
-private fun CharacterItem(character: CharacterUI, isTransparent: Boolean) {
+private fun CharacterItem(character: CharacterSimple, isTransparent: Boolean) {
     ElevatedCard(
         Modifier.padding(horizontal =  Space.medium, vertical = Space.small),
         colors = CardDefaults.elevatedCardColors(containerColor = if (isTransparent) Color.Transparent else Color.Unspecified),
@@ -123,13 +116,13 @@ private fun CharacterItem(character: CharacterUI, isTransparent: Boolean) {
 @Composable
 private fun CharacterListSearchPreview(@PreviewParameter(PreviewProvider::class) state: CharactersStyleState) {
     val characters = listOf(
-        CharacterUI(1,"Rick Sanchez", "Alive", "https://rickandmortyapi.com/api/character/avatar/1.jpeg", true),
-        CharacterUI(3,"Morty Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/2.jpeg", true),
-        CharacterUI(4,"Summer Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/3.jpeg", true),
-        CharacterUI(5,"Beth Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/4.jpeg"),
-        CharacterUI(6,"Jerry Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/5.jpeg"),
-        CharacterUI(7,"Eric Stoltz Mask Morty", "Alive", "https://rickandmortyapi.com/api/character/avatar/6.jpeg"),
-        CharacterUI(8,"Abradolf Lincler", "Unknown", "https://rickandmortyapi.com/api/character/avatar/7.jpeg")
+        CharacterSimple(1,"Rick Sanchez", "Alive", "https://rickandmortyapi.com/api/character/avatar/1.jpeg", true),
+        CharacterSimple(3,"Morty Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/2.jpeg", true),
+        CharacterSimple(4,"Summer Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/3.jpeg", true),
+        CharacterSimple(5,"Beth Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/4.jpeg"),
+        CharacterSimple(6,"Jerry Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/5.jpeg"),
+        CharacterSimple(7,"Eric Stoltz Mask Morty", "Alive", "https://rickandmortyapi.com/api/character/avatar/6.jpeg"),
+        CharacterSimple(8,"Abradolf Lincler", "Unknown", "https://rickandmortyapi.com/api/character/avatar/7.jpeg")
     )
     RickAndMortyTheme(state.isDarkTheme) {
         Scaffold {
