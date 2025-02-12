@@ -2,4 +2,6 @@
     <string name="app_name">RickAndMorty</string>
     <string name="all">All</string>
     <string name="favorites">Favorites</string>
+    <string name="error_no_internet_connection">You are not connected to the internet.</string>
+    <string name="unknown_error">Unknown error</string>
 </resources>
