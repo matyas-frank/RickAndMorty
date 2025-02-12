@@ -17,6 +17,7 @@ datastorePreferences = "1.1.2"
 paging = "3.3.5"
 coil = "3.0.3"
 navigationCompose = "2.8.6"
+kotlinxImmutableCollections = "0.3.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -52,6 +53,7 @@ androidx-paging-compose = { module = "androidx.paging:paging-compose", version.r
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+kotlinx-immutableCollections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxImmutableCollections" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
