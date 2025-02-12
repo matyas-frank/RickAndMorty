@@ -1,6 +1,10 @@
 package cz.frank.rickandmorty.utils.ui
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +17,6 @@ abstract class BaseViewModel<State, Intent, Event> : ViewModel() {
     fun emitEvent(event: Event) { viewModelScope.launch { _events.emit(event) } }
 
     abstract val state: StateFlow<State>
-    abstract fun onIntent(intent: Intent)
 
     abstract suspend fun applyIntent(intent: Intent)
     fun onIntent(intent: Intent) {
@@ -21,4 +24,11 @@ abstract class BaseViewModel<State, Intent, Event> : ViewModel() {
     }
 }
 
+
+@Composable
+fun <E> BaseViewModel<*, *, E>.ProcessEvents(onEvent: (E) -> Unit){
+    val lifecycle = LocalLifecycleOwner.current
+    LaunchedEffect(this) {
+        events.flowWithLifecycle(lifecycle.lifecycle).collect { onEvent(it) }
+    }
 }
