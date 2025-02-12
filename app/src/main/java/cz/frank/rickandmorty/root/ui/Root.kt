@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import cz.frank.rickandmorty.bottombar.navigation.BottomBarDestination
+import cz.frank.rickandmorty.features.bottombar.navigation.BottomBarDestination
 import cz.frank.rickandmorty.root.navigation.mainNavigation
 
 @Composable

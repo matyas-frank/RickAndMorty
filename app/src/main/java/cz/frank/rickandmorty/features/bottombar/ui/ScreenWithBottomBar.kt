@@ -1,4 +1,4 @@
-package cz.frank.rickandmorty.bottombar.ui
+package cz.frank.rickandmorty.features.bottombar.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
@@ -17,10 +17,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import cz.frank.rickandmorty.bottombar.features.all.navigation.AllCharactersNavDestination
-import cz.frank.rickandmorty.bottombar.navigation.BottomBarDestination
-import cz.frank.rickandmorty.bottombar.navigation.NavBarFeature
-import cz.frank.rickandmorty.bottombar.navigation.bottomBarNavGraph
+import cz.frank.rickandmorty.features.bottombar.features.all.navigation.AllCharactersNavDestination
+import cz.frank.rickandmorty.features.bottombar.navigation.BottomBarDestination
+import cz.frank.rickandmorty.features.bottombar.navigation.NavBarFeature
+import cz.frank.rickandmorty.features.bottombar.navigation.bottomBarNavGraph
 
 fun NavGraphBuilder.featuresWithBottomBarNavDestination(
     navHostController: NavHostController,

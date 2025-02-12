@@ -1,4 +1,4 @@
-package cz.frank.rickandmorty.search.navigation
+package cz.frank.rickandmorty.features.search.navigation
 
 import kotlinx.serialization.Serializable
 

@@ -1,10 +1,10 @@
-package cz.frank.rickandmorty.detail.ui
+package cz.frank.rickandmorty.features.detail.ui
 
 import androidx.compose.material3.Text
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import cz.frank.rickandmorty.detail.navigation.DetailNavDestination
+import cz.frank.rickandmorty.features.detail.navigation.DetailNavDestination
 
 fun NavGraphBuilder.detailNavDestination(
     navHostController: NavHostController,

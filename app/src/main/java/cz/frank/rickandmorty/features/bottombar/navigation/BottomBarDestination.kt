@@ -1,4 +1,4 @@
-package cz.frank.rickandmorty.bottombar.navigation
+package cz.frank.rickandmorty.features.bottombar.navigation
 
 import kotlinx.serialization.Serializable
 
