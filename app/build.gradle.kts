@@ -82,4 +82,5 @@ dependencies {
     implementation(libs.coil.network.okhttp)
 
     implementation(libs.kotlinx.immutableCollections)
+    implementation(libs.placeholder.material3)
 }
