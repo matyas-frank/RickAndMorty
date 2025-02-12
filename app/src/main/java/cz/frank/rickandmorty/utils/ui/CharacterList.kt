@@ -1,4 +1,4 @@
-package cz.frank.rickandmorty.utils.ui.list
+package cz.frank.rickandmorty.utils.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -25,7 +25,6 @@ import coil3.request.crossfade
 import cz.frank.rickandmorty.R
 import cz.frank.rickandmorty.root.domain.CharacterSimple
 import cz.frank.rickandmorty.root.ui.theme.RickAndMortyTheme
-import cz.frank.rickandmorty.utils.ui.Space
 import io.github.fornewid.placeholder.foundation.PlaceholderHighlight
 import io.github.fornewid.placeholder.material3.placeholder
 import io.github.fornewid.placeholder.material3.shimmer
