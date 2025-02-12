@@ -1,4 +1,4 @@
-package cz.frank.rickandmorty.ui.theme
+package cz.frank.rickandmorty.root.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

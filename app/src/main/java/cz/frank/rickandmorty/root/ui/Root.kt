@@ -1,4 +1,4 @@
-package cz.frank.rickandmorty.ui
+package cz.frank.rickandmorty.root.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
@@ -15,9 +15,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import cz.frank.rickandmorty.ui.all.AllCharactersNavGraph
-import cz.frank.rickandmorty.ui.navigation.NavBarFeature
-import cz.frank.rickandmorty.ui.navigation.mainNav
+import cz.frank.rickandmorty.all.navigation.AllCharactersNavGraph
+import cz.frank.rickandmorty.root.navigation.NavBarFeature
+import cz.frank.rickandmorty.root.navigation.mainNav
 
 @Composable
 fun Root(modifier: Modifier = Modifier) {

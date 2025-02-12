@@ -1,20 +1,10 @@
-package cz.frank.rickandmorty.ui.all
+package cz.frank.rickandmorty.all.navigation
+
 import androidx.compose.material3.Text
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import kotlinx.serialization.Serializable
-
-@Serializable
-object AllCharactersNavGraph {
-    @Serializable
-    data object All
-    @Serializable
-    data object QuerySearch
-    @Serializable
-    data class Detail(val id: Long)
-}
 
 fun NavGraphBuilder.allCharactersNavGraph(
     navHostController: NavHostController,
