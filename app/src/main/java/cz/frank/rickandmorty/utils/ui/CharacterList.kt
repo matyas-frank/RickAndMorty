@@ -35,18 +35,20 @@ import kotlinx.collections.immutable.toImmutableList
 fun CharacterList(
     characters: ImmutableList<CharacterSimple>,
     modifier: Modifier = Modifier,
-    areCharacterCardsTransparent: Boolean = false
+    areCharacterCardsTransparent: Boolean = false,
+    onCharacterClick: (Long) -> Unit
 ) {
     LazyColumn(modifier) {
         items(characters, key = { it.id }) {
-            CharacterItem(it, areCharacterCardsTransparent)
+            CharacterItem(it, areCharacterCardsTransparent, onCharacterClick)
         }
     }
 }
 
 @Composable
-private fun CharacterItem(character: CharacterSimple, isTransparent: Boolean) {
+private fun CharacterItem(character: CharacterSimple, isTransparent: Boolean, onCharacterClick: (Long) -> Unit) {
     ElevatedCard(
+        onClick = { onCharacterClick(character.id) },
         Modifier.padding(horizontal =  Space.medium, vertical = Space.small),
         colors = CardDefaults.elevatedCardColors(containerColor = if (isTransparent) Color.Transparent else Color.Unspecified),
         elevation = if (isTransparent) CardDefaults.elevatedCardElevation(0.dp) else CardDefaults.elevatedCardElevation(),
@@ -128,7 +130,8 @@ private fun CharacterListSearchPreview(@PreviewParameter(PreviewProvider::class)
             CharacterList(
                 characters.toImmutableList(),
                 Modifier.padding(it),
-                areCharacterCardsTransparent = state.areCharacterCardsTransparent
+                areCharacterCardsTransparent = state.areCharacterCardsTransparent,
+                {}
             )
         }
     }
