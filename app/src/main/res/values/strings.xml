@@ -4,4 +4,6 @@
     <string name="favorites">Favorites</string>
     <string name="error_no_internet_connection">You are not connected to the internet.</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="all_characters_title">Characters</string>
+    <string name="all_characters_search_button_description">Search characters by query</string>
 </resources>
