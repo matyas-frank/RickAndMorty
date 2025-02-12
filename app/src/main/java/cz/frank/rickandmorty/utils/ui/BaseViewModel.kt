@@ -14,4 +14,11 @@ abstract class BaseViewModel<State, Intent, Event> : ViewModel() {
 
     abstract val state: StateFlow<State>
     abstract fun onIntent(intent: Intent)
+
+    abstract suspend fun applyIntent(intent: Intent)
+    fun onIntent(intent: Intent) {
+        viewModelScope.launch { applyIntent(intent) }
+    }
+}
+
 }
