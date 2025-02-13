@@ -107,7 +107,7 @@ private fun CharacterItem(character: CharacterSimple, isTransparent: Boolean, on
                         )
                     }
                 }
-                Text(character.status, fontSize = 14.sp, color = Color.Gray)
+                Text(character.status, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }

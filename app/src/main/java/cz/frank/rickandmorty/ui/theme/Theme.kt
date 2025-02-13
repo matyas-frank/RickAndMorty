@@ -12,7 +12,8 @@ private val DarkColorScheme = darkColorScheme(
     secondary = PurpleGrey80,
     tertiary = Pink80,
     surface = BackgroundBlack,
-    surfaceContainerLow = CardBlack
+    surfaceContainerLow = CardBlack,
+    onSurfaceVariant = Color.Gray,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -21,6 +22,7 @@ private val LightColorScheme = lightColorScheme(
     tertiary = Pink40,
     surface = BackgroundGray,
     surfaceContainerLow = Color.White,
+    onSurfaceVariant = Color.Gray,
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

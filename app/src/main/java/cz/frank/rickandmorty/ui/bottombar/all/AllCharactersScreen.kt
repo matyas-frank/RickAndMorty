@@ -72,7 +72,11 @@ private fun TopBar(onIntent: (AllCharactersIntent) -> Unit) {
         },
         actions = {
             IconButton(onClick = { onIntent(AllCharactersIntent.OnSearchTapped) }) {
-                Icon(Icons.Default.Search, contentDescription = stringResource(R.string.all_characters_search_button_description))
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = stringResource(R.string.all_characters_search_button_description),
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
             }
         }
     )
