@@ -6,4 +6,7 @@
     <string name="unknown_error">Unknown error</string>
     <string name="all_characters_title">Characters</string>
     <string name="all_characters_search_button_description">Search characters by query</string>
+    <string name="go_back_description">Go back</string>
+    <string name="search_characters_clear_query_description">Clear query</string>
+    <string name="search_characters_input_field_placeholder">Search characters</string>
 </resources>
