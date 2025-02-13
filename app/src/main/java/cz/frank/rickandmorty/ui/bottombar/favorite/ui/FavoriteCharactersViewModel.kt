@@ -1,7 +1,7 @@
 package cz.frank.rickandmorty.ui.bottombar.favorite.ui
 
 import androidx.lifecycle.viewModelScope
-import cz.frank.rickandmorty.domain.CharacterSimple
+import cz.frank.rickandmorty.domain.model.CharacterSimple
 import cz.frank.rickandmorty.utils.ErrorResult
 import cz.frank.rickandmorty.utils.ui.BaseViewModel
 import kotlinx.collections.immutable.ImmutableList

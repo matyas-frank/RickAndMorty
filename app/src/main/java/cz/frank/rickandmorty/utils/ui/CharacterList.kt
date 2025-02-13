@@ -23,7 +23,7 @@ import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import cz.frank.rickandmorty.R
-import cz.frank.rickandmorty.domain.CharacterSimple
+import cz.frank.rickandmorty.domain.model.CharacterSimple
 import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import io.github.fornewid.placeholder.foundation.PlaceholderHighlight
 import io.github.fornewid.placeholder.material3.placeholder

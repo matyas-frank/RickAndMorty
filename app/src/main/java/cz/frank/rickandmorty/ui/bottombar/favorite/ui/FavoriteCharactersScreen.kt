@@ -18,7 +18,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import cz.frank.rickandmorty.R
-import cz.frank.rickandmorty.domain.CharacterSimple
+import cz.frank.rickandmorty.domain.model.CharacterSimple
 import cz.frank.rickandmorty.ui.bottombar.favorite.navigation.FavoriteCharactersNavDestination
 import cz.frank.rickandmorty.ui.detail.navigation.DetailCharacterNavDestination
 import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme

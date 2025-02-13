@@ -1,7 +1,7 @@
 package cz.frank.rickandmorty.ui.detail
 
 import androidx.lifecycle.viewModelScope
-import cz.frank.rickandmorty.domain.Character
+import cz.frank.rickandmorty.domain.model.Character
 import cz.frank.rickandmorty.utils.ErrorResult
 import cz.frank.rickandmorty.utils.ui.BaseViewModel
 import kotlinx.coroutines.flow.*

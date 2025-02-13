@@ -1,4 +1,4 @@
-package cz.frank.rickandmorty.domain
+package cz.frank.rickandmorty.domain.model
 
 data class CharacterSimple(
     val id: Long,

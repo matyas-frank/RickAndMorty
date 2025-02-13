@@ -25,7 +25,7 @@ import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import cz.frank.rickandmorty.R
-import cz.frank.rickandmorty.domain.Character
+import cz.frank.rickandmorty.domain.model.Character
 import cz.frank.rickandmorty.ui.detail.navigation.DetailCharacterNavDestination
 import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import cz.frank.rickandmorty.utils.ui.ProcessEvents
