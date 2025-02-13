@@ -20,7 +20,7 @@ import androidx.navigation.compose.composable
 import cz.frank.rickandmorty.R
 import cz.frank.rickandmorty.domain.CharacterSimple
 import cz.frank.rickandmorty.ui.bottombar.favorite.navigation.FavoriteCharactersNavDestination
-import cz.frank.rickandmorty.ui.detail.navigation.DetailNavDestination
+import cz.frank.rickandmorty.ui.detail.navigation.DetailCharacterNavDestination
 import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import cz.frank.rickandmorty.utils.ui.CharacterList
 import cz.frank.rickandmorty.utils.ui.ProcessEvents
@@ -42,7 +42,7 @@ private fun FavoriteCharactersRoute(
 ) {
     viewModel.ProcessEvents {
         when (it) {
-            is FavoriteCharactersEvent.GoToDetail -> navHostController.navigate(DetailNavDestination(it.id))
+            is FavoriteCharactersEvent.GoToDetail -> navHostController.navigate(DetailCharacterNavDestination(it.id))
         }
     }
     val state by viewModel.state.collectAsStateWithLifecycle()

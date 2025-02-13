@@ -19,7 +19,7 @@ import androidx.navigation.compose.composable
 import cz.frank.rickandmorty.R
 import cz.frank.rickandmorty.domain.CharacterSimple
 import cz.frank.rickandmorty.ui.bottombar.all.navigation.AllCharactersNavDestination
-import cz.frank.rickandmorty.ui.detail.navigation.DetailNavDestination
+import cz.frank.rickandmorty.ui.detail.navigation.DetailCharacterNavDestination
 import cz.frank.rickandmorty.ui.search.navigation.QuerySearchedCharactersNavDestination
 import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import cz.frank.rickandmorty.utils.ui.CharacterList
@@ -43,7 +43,7 @@ private fun AllCharactersRoute(
     viewModel.ProcessEvents {
         when (it) {
             AllCharactersEvent.GoBack -> navHostController.navigateUp()
-            is AllCharactersEvent.GoToDetail -> navHostController.navigate(DetailNavDestination(it.id))
+            is AllCharactersEvent.GoToDetail -> navHostController.navigate(DetailCharacterNavDestination(it.id))
             is AllCharactersEvent.GoToQuerySearch -> navHostController.navigate(QuerySearchedCharactersNavDestination)
         }
     }

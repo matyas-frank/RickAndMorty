@@ -90,12 +90,11 @@ private fun CharacterItem(character: CharacterSimple, isTransparent: Boolean, on
 
             Column {
                 Row {
-                    val titleSize = 18.sp
+                    val style = MaterialTheme.typography.labelLarge
                     Text(
                         character.name,
                         modifier = Modifier.weight(1f, fill = false),
-                        fontSize = titleSize,
-                        style = MaterialTheme.typography.labelLarge
+                        style = style
                     )
                     Spacer(Modifier.width(Space.small))
                     if (character.isFavorite) {
@@ -103,7 +102,7 @@ private fun CharacterItem(character: CharacterSimple, isTransparent: Boolean, on
                             painter = painterResource(R.drawable.ic_star),
                             contentDescription = "Favorite",
                             tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(with(LocalDensity.current) { titleSize.toDp() })
+                            modifier = Modifier.size(with(LocalDensity.current) { style.fontSize.toDp() })
                         )
                     }
                 }

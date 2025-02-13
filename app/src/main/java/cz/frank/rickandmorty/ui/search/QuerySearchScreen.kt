@@ -21,7 +21,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import cz.frank.rickandmorty.R
 import cz.frank.rickandmorty.domain.CharacterSimple
-import cz.frank.rickandmorty.ui.detail.navigation.DetailNavDestination
+import cz.frank.rickandmorty.ui.detail.navigation.DetailCharacterNavDestination
 import cz.frank.rickandmorty.ui.search.navigation.QuerySearchedCharactersNavDestination
 import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import cz.frank.rickandmorty.utils.ui.CharacterList
@@ -45,7 +45,7 @@ private fun QuerySearchCharactersRoute(
     viewModel.ProcessEvents {
         when (it) {
             QuerySearchCharactersEvent.GoBack -> navHostController.navigateUp()
-            is QuerySearchCharactersEvent.GoToDetail -> navHostController.navigate(DetailNavDestination(it.id))
+            is QuerySearchCharactersEvent.GoToDetail -> navHostController.navigate(DetailCharacterNavDestination(it.id))
         }
     }
     val state by viewModel.state.collectAsStateWithLifecycle()

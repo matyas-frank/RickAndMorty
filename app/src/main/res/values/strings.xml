@@ -10,4 +10,13 @@
     <string name="search_characters_clear_query_description">Clear query</string>
     <string name="search_characters_input_field_placeholder">Search characters</string>
     <string name="favorite_characters_title">Favorites</string>
+    <string name="detail_character_name">Name</string>
+    <string name="detail_character_status">Status</string>
+    <string name="detail_character_species">Species</string>
+    <string name="detail_character_type">Type</string>
+    <string name="detail_character_gender">Gender</string>
+    <string name="detail_character_origin">Origin</string>
+    <string name="detail_character_location">Location</string>
+    <string name="detail_character_mark_favorite_description">Mark favorite</string>
+    <string name="detail_character_mark_not_favorite_description">Mark not favorite</string>
 </resources>
