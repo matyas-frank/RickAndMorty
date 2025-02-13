@@ -29,40 +29,40 @@ import cz.frank.rickandmorty.utils.ui.ProcessEvents
 import kotlinx.collections.immutable.toImmutableList
 import org.koin.compose.viewmodel.koinViewModel
 
-fun NavGraphBuilder.querySearchedCharactersNavDestination(
+fun NavGraphBuilder.querySearchCharactersNavDestination(
     navHostController: NavHostController,
 ) {
     composable<QuerySearchedCharactersNavDestination> {
-        CharacterSearchRoute(navHostController)
+        QuerySearchCharactersRoute(navHostController)
     }
 }
 
 @Composable
-private fun CharacterSearchRoute(
+private fun QuerySearchCharactersRoute(
     navHostController: NavHostController,
-    viewModel: CharacterSearchViewModel = koinViewModel()
+    viewModel: QuerySearchCharactersViewModel = koinViewModel()
 ) {
     viewModel.ProcessEvents {
         when (it) {
-            CharacterSearchEvent.GoBack -> navHostController.navigateUp()
-            is CharacterSearchEvent.GoToDetail -> navHostController.navigate(DetailNavDestination(it.id))
+            QuerySearchCharactersEvent.GoBack -> navHostController.navigateUp()
+            is QuerySearchCharactersEvent.GoToDetail -> navHostController.navigate(DetailNavDestination(it.id))
         }
     }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    CharacterSearchScreen(state, viewModel::onIntent)
+    QuerySearchCharactersScreen(state, viewModel::onIntent)
 }
 
 
 @Composable
-private fun CharacterSearchScreen(state: CharacterSearchState, onIntent: (CharacterSearchIntent) -> Unit) {
+private fun QuerySearchCharactersScreen(state: QuerySearchCharactersState, onIntent: (QuerySearchCharactersIntent) -> Unit) {
     Column {
         Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(state.query, onIntent) }
         Surface(Modifier.zIndex(1f).fillMaxSize()) {
             CharacterList(
                 state.characterSimple,
                 areCharacterCardsTransparent = true,
-                onCharacterClick = { onIntent(CharacterSearchIntent.OnItemTapped(it)) }
+                onCharacterClick = { onIntent(QuerySearchCharactersIntent.OnItemTapped(it)) }
             )
         }
     }
@@ -70,12 +70,12 @@ private fun CharacterSearchScreen(state: CharacterSearchState, onIntent: (Charac
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBar(query: String, onIntent: (CharacterSearchIntent) -> Unit) {
+private fun TopBar(query: String, onIntent: (QuerySearchCharactersIntent) -> Unit) {
     TopAppBar(
         title = {
             InputField(
                 query = query,
-                onQueryChange = { onIntent(CharacterSearchIntent.OnQueryChanged(it)) },
+                onQueryChange = { onIntent(QuerySearchCharactersIntent.OnQueryChanged(it)) },
                 onSearch = { /* Not necessary because search is immediate after typing */ },
                 expanded = true,
                 onExpandedChange = { /* Search view is permanent */ },
@@ -83,13 +83,13 @@ private fun TopBar(query: String, onIntent: (CharacterSearchIntent) -> Unit) {
             )
         },
         navigationIcon = {
-            IconButton(onClick = { onIntent(CharacterSearchIntent.OnBackTapped) }) {
+            IconButton(onClick = { onIntent(QuerySearchCharactersIntent.OnBackTapped) }) {
                 Icon(Icons.AutoMirrored.Default.ArrowBack, stringResource(R.string.go_back_description))
             }
         },
         actions = {
             AnimatedVisibility(query.isNotBlank()) {
-                IconButton(onClick = { onIntent(CharacterSearchIntent.OnClearQueryTapped) }) {
+                IconButton(onClick = { onIntent(QuerySearchCharactersIntent.OnClearQueryTapped) }) {
                     Icon(Icons.Default.Clear, contentDescription = stringResource(R.string.search_characters_clear_query_description))
                 }
             }
@@ -110,7 +110,7 @@ private fun Preview() {
         CharacterSimple(7,"Eric Stoltz Mask Morty", "Alive", "https://rickandmortyapi.com/api/character/avatar/6.jpeg"),
         CharacterSimple(8,"Abradolf Lincler", "Unknown", "https://rickandmortyapi.com/api/character/avatar/7.jpeg")
     )
-    val state = CharacterSearchState(characters.toImmutableList(), status = CharacterSearchState.Status(loading = false), "")
-    RickAndMortyTheme { CharacterSearchScreen (state) { } }
+    val state = QuerySearchCharactersState(characters.toImmutableList(), status = QuerySearchCharactersState.Status(loading = false), "")
+    RickAndMortyTheme { QuerySearchCharactersScreen (state) { } }
 }
 

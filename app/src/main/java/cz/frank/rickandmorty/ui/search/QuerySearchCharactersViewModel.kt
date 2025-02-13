@@ -8,8 +8,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.*
 
-class CharacterSearchViewModel : BaseViewModel<CharacterSearchState, CharacterSearchIntent, CharacterSearchEvent>() {
-    private val status = MutableStateFlow(CharacterSearchState.Status())
+class QuerySearchCharactersViewModel : BaseViewModel<QuerySearchCharactersState, QuerySearchCharactersIntent, QuerySearchCharactersEvent>() {
+    private val status = MutableStateFlow(QuerySearchCharactersState.Status())
     private val characters = MutableStateFlow(
         persistentListOf(
             CharacterSimple(1, "Rick Sanchez", "Alive", "https://rickandmortyapi.com/api/character/avatar/1.jpeg", true),
@@ -23,21 +23,21 @@ class CharacterSearchViewModel : BaseViewModel<CharacterSearchState, CharacterSe
     )
     private val query = MutableStateFlow("")
 
-    override val state: StateFlow<CharacterSearchState> = combine(status, characters, query) { status, characters, query ->
-        CharacterSearchState(characters, status, query)
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), CharacterSearchState(characters.value, status.value, query.value))
+    override val state: StateFlow<QuerySearchCharactersState> = combine(status, characters, query) { status, characters, query ->
+        QuerySearchCharactersState(characters, status, query)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), QuerySearchCharactersState(characters.value, status.value, query.value))
 
-    override suspend fun applyIntent(intent: CharacterSearchIntent) {
+    override suspend fun applyIntent(intent: QuerySearchCharactersIntent) {
         when (intent) {
-            is CharacterSearchIntent.OnItemTapped -> emitEvent(CharacterSearchEvent.GoToDetail(intent.id))
-            is CharacterSearchIntent.OnBackTapped -> emitEvent(CharacterSearchEvent.GoBack)
-            is CharacterSearchIntent.OnQueryChanged -> query.value = intent.query
-            is CharacterSearchIntent.OnClearQueryTapped -> query.value = ""
+            is QuerySearchCharactersIntent.OnItemTapped -> emitEvent(QuerySearchCharactersEvent.GoToDetail(intent.id))
+            is QuerySearchCharactersIntent.OnBackTapped -> emitEvent(QuerySearchCharactersEvent.GoBack)
+            is QuerySearchCharactersIntent.OnQueryChanged -> query.value = intent.query
+            is QuerySearchCharactersIntent.OnClearQueryTapped -> query.value = ""
         }
     }
 }
 
-data class CharacterSearchState(
+data class QuerySearchCharactersState(
     val characterSimple: ImmutableList<CharacterSimple>,
     val status: Status,
     val query: String,
@@ -46,14 +46,14 @@ data class CharacterSearchState(
 }
 
 
-sealed interface CharacterSearchIntent {
-    data class OnItemTapped(val id: Long) : CharacterSearchIntent
-    data object OnBackTapped : CharacterSearchIntent
-    data class OnQueryChanged(val query: String) : CharacterSearchIntent
-    data object OnClearQueryTapped : CharacterSearchIntent
+sealed interface QuerySearchCharactersIntent {
+    data class OnItemTapped(val id: Long) : QuerySearchCharactersIntent
+    data object OnBackTapped : QuerySearchCharactersIntent
+    data class OnQueryChanged(val query: String) : QuerySearchCharactersIntent
+    data object OnClearQueryTapped : QuerySearchCharactersIntent
 }
 
-sealed interface CharacterSearchEvent {
-    data object GoBack : CharacterSearchEvent
-    data class GoToDetail(val id: Long) : CharacterSearchEvent
+sealed interface QuerySearchCharactersEvent {
+    data object GoBack : QuerySearchCharactersEvent
+    data class GoToDetail(val id: Long) : QuerySearchCharactersEvent
 }
