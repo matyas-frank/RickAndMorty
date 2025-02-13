@@ -9,4 +9,5 @@
     <string name="go_back_description">Go back</string>
     <string name="search_characters_clear_query_description">Clear query</string>
     <string name="search_characters_input_field_placeholder">Search characters</string>
+    <string name="favorite_characters_title">Favorites</string>
 </resources>
