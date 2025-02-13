@@ -36,7 +36,7 @@ fun NavGraphBuilder.featuresWithBottomBarNavDestination(
 @Composable
 private fun FeaturesWithBottomBarScreen(mainNavController: NavHostController, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    Column(modifier) {
+    Column(modifier) { // Wanted to use scaffold but, there is problem when using topAppBar in scaffold content
         NavHost(
             navController,
             startDestination = AllCharactersNavDestination,
