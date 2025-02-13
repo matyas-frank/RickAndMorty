@@ -10,6 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -54,8 +56,8 @@ private fun AllCharactersRoute(
 @Composable
 private fun AllCharactersScreen(state: State, onIntent: (AllCharactersIntent) -> Unit) {
     Column {
-        TopBar(onIntent)
-        Surface(Modifier.fillMaxSize()) {
+        Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(onIntent) }
+        Surface(Modifier.zIndex(1f).fillMaxSize()) {
             CharacterList(state.characterSimple, onCharacterClick = { onIntent(AllCharactersIntent.OnItemTapped(it)) })
         }
     }
