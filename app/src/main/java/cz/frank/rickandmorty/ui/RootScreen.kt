@@ -10,7 +10,7 @@ import cz.frank.rickandmorty.ui.navigation.rootNavigation
 @Composable
 fun Root(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    NavHost(navController, startDestination = BottomBarDestination) {
+    NavHost(navController, startDestination = BottomBarDestination, modifier) {
         rootNavigation(navController)
     }
 }
