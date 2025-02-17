@@ -2,6 +2,7 @@ package cz.frank.rickandmorty.infrastructure.remote
 
 import android.util.Log
 import cz.frank.rickandmorty.infrastructure.remote.model.GRAPHQLWrapperRemoteDto
+import cz.frank.rickandmorty.infrastructure.remote.model.detail.CharacterDetailHolderDto
 import cz.frank.rickandmorty.infrastructure.remote.model.simple.CharactersSimplePageHolderRemoteDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -28,6 +29,32 @@ class CharactersService(private val client: HttpClient) {
                         }""".trimMargin())
             })
         }.also { Log.d("CharacterService", it.body()) }.body()
+    }
+
+        suspend fun getCharacter(id: Long): Result<GRAPHQLWrapperRemoteDto<CharacterDetailHolderDto>> = runCatching {
+            client.post(GRAPHQL) {
+                setBody(buildJsonObject {
+                    put("query",
+                        """{
+                                character(id:$id) {
+                                    id
+                                    name
+                                    status
+                                    image
+                                    species
+                                    type
+                                    gender
+                                    origin {
+                                        name
+                                    }
+                                    location {
+                                        name
+                                    }
+                                }  
+                        }""".trimMargin()
+                    )
+                })
+        }.body()
     }
 
     companion object {

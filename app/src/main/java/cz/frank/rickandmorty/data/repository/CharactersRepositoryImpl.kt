@@ -6,6 +6,8 @@ import cz.frank.rickandmorty.data.local.model.toDomain
 import cz.frank.rickandmorty.data.mediator.RemoteCharactersMediator
 import cz.frank.rickandmorty.data.mediator.RemotePagingSource
 import cz.frank.rickandmorty.data.source.CharactersLocalSource
+import cz.frank.rickandmorty.data.source.CharactersRemoteSource
+import cz.frank.rickandmorty.domain.model.Character
 import cz.frank.rickandmorty.domain.model.CharacterSimple
 import cz.frank.rickandmorty.domain.repository.CharactersRepository
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +16,7 @@ import kotlinx.coroutines.flow.map
 
 class CharactersRepositoryImpl(
     private val localSource: CharactersLocalSource,
+    private val remoteSource: CharactersRemoteSource,
     private val allMediator: RemoteCharactersMediator,
     private val remotePagingSource: (String) -> RemotePagingSource
 ) : CharactersRepository {
@@ -42,6 +45,8 @@ class CharactersRepositoryImpl(
             pagingSourceFactory = { localSource.favoriteCharacters() }
         ).flow.toDomain()
     }
+
+    override suspend fun detailItem(id: Long): Result<Character> = remoteSource.getCharacter(id)
 
     companion object {
         private const val PAGE_SIZE = 50
