@@ -27,7 +27,6 @@ import cz.frank.rickandmorty.ui.search.navigation.QuerySearchedCharactersNavDest
 import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import cz.frank.rickandmorty.utils.ui.CharacterList
 import cz.frank.rickandmorty.utils.ui.ProcessEvents
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -59,7 +58,7 @@ private fun AllCharactersRoute(
 
 
 @Composable
-private fun AllCharactersScreen(items: LazyPagingItems<CharacterSimple>, state: State, onIntent: (AllCharactersIntent) -> Unit) {
+private fun AllCharactersScreen(items: LazyPagingItems<CharacterSimple>, state: AllCharactersState, onIntent: (AllCharactersIntent) -> Unit) {
     Column {
         Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(onIntent) }
         Surface(Modifier.zIndex(1f).fillMaxSize()) {
@@ -99,7 +98,7 @@ private fun Preview() {
         CharacterSimple(7,"Eric Stoltz Mask Morty", "Alive", "https://rickandmortyapi.com/api/character/avatar/6.jpeg"),
         CharacterSimple(8,"Abradolf Lincler", "Unknown", "https://rickandmortyapi.com/api/character/avatar/7.jpeg")
     )
-    val state = State(characters.toImmutableList(), State.Status(false))
+    val state = AllCharactersState(false)
     val data = flowOf(PagingData.from(characters)).collectAsLazyPagingItems()
     RickAndMortyTheme { AllCharactersScreen(items = data,state) { } }
 }

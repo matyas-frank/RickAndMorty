@@ -1,33 +1,19 @@
 package cz.frank.rickandmorty.ui.bottombar.all
 
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import cz.frank.rickandmorty.domain.model.CharacterSimple
+import androidx.paging.cachedIn
+import cz.frank.rickandmorty.domain.usecase.AllCharactersUseCase
 import cz.frank.rickandmorty.utils.ErrorResult
 import cz.frank.rickandmorty.utils.ui.BaseViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-class AllCharactersViewModel : BaseViewModel<State, AllCharactersIntent, AllCharactersEvent>() {
-    private val status = MutableStateFlow(State.Status())
-    private val characters = MutableStateFlow(
-        persistentListOf(
-            CharacterSimple(1, "Rick Sanchez", "Alive", "https://rickandmortyapi.com/api/character/avatar/1.jpeg", true),
-            CharacterSimple(3, "Morty Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/2.jpeg", true),
-            CharacterSimple(4, "Summer Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/3.jpeg", true),
-            CharacterSimple(5, "Beth Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/4.jpeg"),
-            CharacterSimple(6, "Jerry Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/5.jpeg"),
-            CharacterSimple(7, "Eric Stoltz Mask Morty", "Alive", "https://rickandmortyapi.com/api/character/avatar/6.jpeg"),
-            CharacterSimple(8, "Abradolf Lincler", "Unknown", "https://rickandmortyapi.com/api/character/avatar/7.jpeg")
-        )
-    )
+class AllCharactersViewModel(allCharactersFlowUseCase: AllCharactersUseCase) : BaseViewModel<AllCharactersState, AllCharactersIntent, AllCharactersEvent>() {
+    private val status = MutableStateFlow(AllCharactersState())
+    override val state: StateFlow<AllCharactersState> = status.asStateFlow()
 
-    val allCharactersFlow = flowOf(PagingData.from(characters.value))
-
-    override val state: StateFlow<State> = combine(status, characters) { status, characters ->
-        State(characters, status)
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), State(characters.value, status.value))
+    val allCharactersFlow = allCharactersFlowUseCase().cachedIn(viewModelScope)
 
     override suspend fun applyIntent(intent: AllCharactersIntent) {
         when (intent) {
@@ -38,9 +24,7 @@ class AllCharactersViewModel : BaseViewModel<State, AllCharactersIntent, AllChar
     }
 }
 
-data class State(val characterSimple: ImmutableList<CharacterSimple>, val status: Status = Status()) {
-    data class Status(val loading: Boolean = true, val error: ErrorResult? = null)
-}
+data class AllCharactersState(val loading: Boolean = true, val error: ErrorResult? = null)
 
 
 sealed interface AllCharactersIntent {
