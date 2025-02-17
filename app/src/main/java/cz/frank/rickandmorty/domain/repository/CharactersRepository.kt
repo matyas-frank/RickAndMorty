@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface CharactersRepository {
     fun pagedSearchItems(query: String): Flow<PagingData<CharacterSimple>>
     fun pagedSearchItems(): Flow<PagingData<CharacterSimple>>
+    fun favoriteItems(): Flow<PagingData<CharacterSimple>>
 }

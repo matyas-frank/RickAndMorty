@@ -33,4 +33,6 @@ class CharactersLocalSourceImpl(
     }
 
     override fun allFavoritesFlow(): Flow<List<Long>> = charactersDao.allFavorites().map { it.map { it.id } }
+
+    override fun favoriteCharacters(): PagingSource<Int, CharacterSimpleWithFavoriteLocalDto> = charactersDao.favoriteCharacters()
 }

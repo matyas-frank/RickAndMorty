@@ -36,6 +36,13 @@ class CharactersRepositoryImpl(
         }
     }
 
+    override fun favoriteItems(): Flow<PagingData<CharacterSimple>> {
+        return Pager(
+            PagingConfig(PAGE_SIZE),
+            pagingSourceFactory = { localSource.favoriteCharacters() }
+        ).flow.toDomain()
+    }
+
     companion object {
         private const val PAGE_SIZE = 50
     }

@@ -87,6 +87,6 @@ private fun Preview() {
         CharacterSimple(7,"Eric Stoltz Mask Morty", "Alive", "https://rickandmortyapi.com/api/character/avatar/6.jpeg", true),
         CharacterSimple(8,"Abradolf Lincler", "Unknown", "https://rickandmortyapi.com/api/character/avatar/7.jpeg", true)
     )
-    val state = FavoriteCharactersState(characters.toImmutableList(), status = FavoriteCharactersState.Status(loading = false))
+    val state = FavoriteCharactersState(loading = false)
     RickAndMortyTheme { AllCharactersScreen(flowOf(PagingData.from(characters)).collectAsLazyPagingItems(), state) { } }
 }

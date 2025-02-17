@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CharactersLocalSource  {
     fun allCharacters(): PagingSource<Int, CharacterSimpleWithFavoriteLocalDto>
+    fun favoriteCharacters(): PagingSource<Int, CharacterSimpleWithFavoriteLocalDto>
     fun allFavoritesFlow() : Flow<List<Long>>
     fun addFavorite(favoriteId: Long)
     fun removeFavorite(favoriteId: Long)
