@@ -7,9 +7,6 @@
     <string name="all_characters_title">Characters</string>
     <string name="all_characters_search_button_description">Search characters by query</string>
     <string name="go_back_description">Go back</string>
-    <string name="search_characters_error_title">Something went wrong. Please try again later.</string>
-    <string name="search_characters_error_support_message">Oops!</string>
-    <string name="search_characters_error_try_again">Try Again</string>
     <string name="search_characters_clear_query_description">Clear query</string>
     <string name="search_characters_input_field_placeholder">Search characters</string>
     <string name="favorite_characters_title">Favorites</string>
@@ -24,4 +21,7 @@
     <string name="detail_character_location">Location</string>
     <string name="detail_character_mark_favorite_description">Mark favorite</string>
     <string name="detail_character_mark_not_favorite_description">Mark not favorite</string>
+    <string name="error_screen_title">Something went wrong. Please try again later.</string>
+    <string name="error_screen_support_message">Oops!</string>
+    <string name="error_screen_try_again">Try Again</string>
 </resources>

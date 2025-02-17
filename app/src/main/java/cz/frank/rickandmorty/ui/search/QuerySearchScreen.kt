@@ -1,25 +1,22 @@
 package cz.frank.rickandmorty.ui.search
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.material3.SearchBarDefaults.InputField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -35,8 +32,8 @@ import cz.frank.rickandmorty.ui.detail.navigation.DetailCharacterNavDestination
 import cz.frank.rickandmorty.ui.search.navigation.QuerySearchedCharactersNavDestination
 import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import cz.frank.rickandmorty.utils.ui.CharacterList
+import cz.frank.rickandmorty.utils.ui.ErrorScreen
 import cz.frank.rickandmorty.utils.ui.ProcessEvents
-import cz.frank.rickandmorty.utils.ui.Space
 import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -153,52 +150,6 @@ private fun SuccessScreen(
             areCharacterCardsTransparent = true,
             onCharacterClick = { onIntent(QuerySearchCharactersIntent.OnItemTapped(it)) }
         )
-    }
-}
-
-
-@Composable
-private fun ErrorScreen(onRetry: () -> Unit) {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(
-            modifier = Modifier.padding(Space.medium),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Card(shape = CircleShape) {
-                Icon(
-                    imageVector = Icons.Default.Warning,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(100.dp)
-                        .padding(Space.medium),
-                )
-            }
-
-            Spacer(modifier = Modifier.height(Space.xxlarge))
-
-            Text(
-                text = stringResource(R.string.search_characters_error_title),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.headlineMedium,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(Space.small))
-
-            Text(
-                text = stringResource(R.string.search_characters_error_support_message),
-                fontSize = 16.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = Space.xlarge)
-            )
-
-            Spacer(modifier = Modifier.height(Space.large))
-
-            Button(onClick = onRetry, shape = MaterialTheme.shapes.medium) {
-                Text(text = stringResource(R.string.search_characters_error_try_again))
-            }
-        }
     }
 }
 
