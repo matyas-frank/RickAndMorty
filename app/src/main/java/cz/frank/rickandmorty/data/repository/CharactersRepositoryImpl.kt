@@ -1,6 +1,7 @@
 package cz.frank.rickandmorty.data.repository
 
 import androidx.paging.*
+import cz.frank.rickandmorty.data.local.model.CharacterSimpleWithFavoriteLocalDto
 import cz.frank.rickandmorty.data.local.model.toDomain
 import cz.frank.rickandmorty.data.mediator.RemoteCharactersMediator
 import cz.frank.rickandmorty.data.mediator.RemotePagingSource
@@ -22,7 +23,7 @@ class CharactersRepositoryImpl(
             PagingConfig(PAGE_SIZE),
             remoteMediator = allMediator,
             pagingSourceFactory = { localSource.allCharacters() }
-        ).flow.map { it.map { it.toDomain() } }
+        ).flow.toDomain()
     }
 
     override fun pagedSearchItems(query: String): Flow<PagingData<CharacterSimple>> {
@@ -39,3 +40,5 @@ class CharactersRepositoryImpl(
         private const val PAGE_SIZE = 50
     }
 }
+
+private fun Flow<PagingData<CharacterSimpleWithFavoriteLocalDto>>.toDomain() = map { it.map { it.toDomain() } }
