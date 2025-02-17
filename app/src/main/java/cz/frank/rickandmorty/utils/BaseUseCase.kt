@@ -15,3 +15,7 @@ interface UseCaseFlowWithParams<Params, Result> {
 interface UseCaseSuspendWithParams<Params, Res : Any> {
     suspend operator fun invoke(params: Params): Result<Res>
 }
+
+interface UseCaseWithParams<Params, Result> {
+    suspend operator fun invoke(params: Params): Result
+}
