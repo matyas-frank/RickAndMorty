@@ -1,7 +1,9 @@
 package cz.frank.rickandmorty.ui.search
 
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import cz.frank.rickandmorty.domain.usecase.QueryCharactersUseCase
+import cz.frank.rickandmorty.domain.usecase.QueryCharactersUseCaseParams
 import cz.frank.rickandmorty.utils.ErrorResult
 import cz.frank.rickandmorty.utils.ui.BaseViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,7 +16,7 @@ class QuerySearchCharactersViewModel(querySearchedCharactersUseCase: QueryCharac
     private val query = MutableStateFlow("")
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    val charactersFlow = query.debounce(400.milliseconds).flatMapLatest { querySearchedCharactersUseCase(it) }
+    val charactersFlow = query.debounce(400.milliseconds).flatMapLatest { querySearchedCharactersUseCase(QueryCharactersUseCaseParams(it, viewModelScope)) }.cachedIn(viewModelScope)
 
     override val state: StateFlow<QuerySearchCharactersState> = combine(status, query) { status, query ->
         QuerySearchCharactersState(status, query)
