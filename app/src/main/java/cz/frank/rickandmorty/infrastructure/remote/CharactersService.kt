@@ -15,7 +15,7 @@ class CharactersService(private val client: HttpClient) {
             setBody(buildJsonObject {
                 put("query",
                     """{ 
-                            characters(page: $page ${ query?.let {  ",filter: { name: $it }"  } ?: "" }) { 
+                            characters(page: $page ${ query?.let {  ",filter: { name: \"$it\" }"  } ?: "" }) { 
                                 info { next } 
                                 results { 
                                     id 
