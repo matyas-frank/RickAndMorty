@@ -64,7 +64,7 @@ private fun DetailCharacterRoute(
 private fun DetailCharacterScreen(state: DetailCharacterState, onIntent: (DetailCharacterIntent) -> Unit) {
     state.character?.let { character ->
         Scaffold(topBar = {
-            Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(character.isFavorite, onIntent) }
+            Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(character.name, character.isFavorite, onIntent) }
         }) {
             Surface(
                 Modifier
@@ -79,10 +79,10 @@ private fun DetailCharacterScreen(state: DetailCharacterState, onIntent: (Detail
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBar(isFavorite: Boolean, onIntent: (DetailCharacterIntent) -> Unit) {
+private fun TopBar(name: String, isFavorite: Boolean, onIntent: (DetailCharacterIntent) -> Unit) {
     TopAppBar(
         title = {
-            Text(stringResource(R.string.favorite_characters_title))
+            Text(name)
         },
         navigationIcon = {
             IconButton(onClick = { onIntent(DetailCharacterIntent.OnBackTapped) }) {
