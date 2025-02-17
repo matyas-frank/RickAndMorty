@@ -1,8 +1,7 @@
-package cz.frank.rickandmorty.data.mediator
+package cz.frank.rickandmorty.data.source
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import cz.frank.rickandmorty.data.source.CharactersRemoteSource
 import cz.frank.rickandmorty.domain.model.CharacterSimple
 
 class RemotePagingSource(

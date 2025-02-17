@@ -4,9 +4,9 @@ import androidx.paging.*
 import cz.frank.rickandmorty.data.local.model.CharacterSimpleWithFavoriteLocalDto
 import cz.frank.rickandmorty.data.local.model.toDomain
 import cz.frank.rickandmorty.data.mediator.RemoteCharactersMediator
-import cz.frank.rickandmorty.data.mediator.RemotePagingSource
 import cz.frank.rickandmorty.data.source.CharactersLocalSource
 import cz.frank.rickandmorty.data.source.CharactersRemoteSource
+import cz.frank.rickandmorty.data.source.RemotePagingSource
 import cz.frank.rickandmorty.domain.model.Character
 import cz.frank.rickandmorty.domain.model.CharacterSimple
 import cz.frank.rickandmorty.domain.repository.CharactersRepository

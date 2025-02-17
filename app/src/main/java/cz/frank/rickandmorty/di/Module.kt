@@ -1,7 +1,7 @@
 package cz.frank.rickandmorty.di
 
 import cz.frank.rickandmorty.data.mediator.RemoteCharactersMediator
-import cz.frank.rickandmorty.data.mediator.RemotePagingSource
+import cz.frank.rickandmorty.data.source.RemotePagingSource
 import cz.frank.rickandmorty.data.repository.CharactersRepositoryImpl
 import cz.frank.rickandmorty.data.source.CharactersLocalSource
 import cz.frank.rickandmorty.data.source.CharactersRemoteSource
