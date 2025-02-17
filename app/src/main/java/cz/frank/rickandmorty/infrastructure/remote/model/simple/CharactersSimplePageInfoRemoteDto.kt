@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CharactersSimplePageInfoRemoteDto(
     @SerialName("next")
-    val next: Int,
+    val next: Int?,
 )
