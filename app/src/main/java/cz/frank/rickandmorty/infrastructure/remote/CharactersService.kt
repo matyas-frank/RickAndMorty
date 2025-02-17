@@ -1,7 +1,8 @@
 package cz.frank.rickandmorty.infrastructure.remote
 
 import android.util.Log
-import cz.frank.rickandmorty.infrastructure.remote.model.simple.GRAPHQLHolderRemoteDto
+import cz.frank.rickandmorty.infrastructure.remote.model.GRAPHQLWrapperRemoteDto
+import cz.frank.rickandmorty.infrastructure.remote.model.simple.CharactersSimplePageHolderRemoteDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
@@ -10,7 +11,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
 class CharactersService(private val client: HttpClient) {
-    suspend fun getCharacters(page: Int, query: String? = null): Result<GRAPHQLHolderRemoteDto> = runCatching {
+    suspend fun getCharacters(page: Int, query: String? = null): Result<GRAPHQLWrapperRemoteDto<CharactersSimplePageHolderRemoteDto>> = runCatching {
         client.post(GRAPHQL) {
             setBody(buildJsonObject {
                 put("query",
