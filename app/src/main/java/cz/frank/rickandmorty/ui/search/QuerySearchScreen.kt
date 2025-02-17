@@ -1,7 +1,9 @@
 package cz.frank.rickandmorty.ui.search
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -20,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -73,12 +76,22 @@ private fun QuerySearchCharactersScreen(
             Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(state.query, onIntent, scrollBehavior) }
         }
     ) {
-        Surface(Modifier.zIndex(1f).fillMaxSize().padding(it)) {
-            CharacterList(
-                characters,
-                areCharacterCardsTransparent = true,
-                onCharacterClick = { onIntent(QuerySearchCharactersIntent.OnItemTapped(it)) }
-            )
+        Surface(
+            Modifier
+                .zIndex(1f)
+                .fillMaxSize()
+                .padding(it)
+        ) {
+            Column {
+                AnimatedVisibility(characters.loadState.refresh is LoadState.Loading && state.query.isNotBlank()) {
+                    LinearProgressIndicator(Modifier.fillMaxWidth())
+                }
+                CharacterList(
+                    characters,
+                    areCharacterCardsTransparent = true,
+                    onCharacterClick = { onIntent(QuerySearchCharactersIntent.OnItemTapped(it)) }
+                )
+            }
         }
     }
 }
@@ -125,7 +138,7 @@ private fun Preview() {
         CharacterSimple(7,"Eric Stoltz Mask Morty", "Alive", "https://rickandmortyapi.com/api/character/avatar/6.jpeg"),
         CharacterSimple(8,"Abradolf Lincler", "Unknown", "https://rickandmortyapi.com/api/character/avatar/7.jpeg")
     )
-    val state = QuerySearchCharactersState(status = QuerySearchCharactersState.Status(loading = false), "")
+    val state = QuerySearchCharactersState("")
     RickAndMortyTheme { QuerySearchCharactersScreen (flowOf(PagingData.from(characters)).collectAsLazyPagingItems(), state) { } }
 }
 

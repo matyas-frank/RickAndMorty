@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import cz.frank.rickandmorty.domain.usecase.QueryCharactersUseCase
 import cz.frank.rickandmorty.domain.usecase.QueryCharactersUseCaseParams
-import cz.frank.rickandmorty.utils.ErrorResult
 import cz.frank.rickandmorty.utils.ui.BaseViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -12,15 +11,17 @@ import kotlinx.coroutines.flow.*
 import kotlin.time.Duration.Companion.milliseconds
 
 class QuerySearchCharactersViewModel(querySearchedCharactersUseCase: QueryCharactersUseCase) : BaseViewModel<QuerySearchCharactersState, QuerySearchCharactersIntent, QuerySearchCharactersEvent>() {
-    private val status = MutableStateFlow(QuerySearchCharactersState.Status())
     private val query = MutableStateFlow("")
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    val charactersFlow = query.debounce(400.milliseconds).flatMapLatest { querySearchedCharactersUseCase(QueryCharactersUseCaseParams(it, viewModelScope)) }.cachedIn(viewModelScope)
+    val charactersFlow = query
+        .debounce(400.milliseconds)
+        .flatMapLatest { querySearchedCharactersUseCase(QueryCharactersUseCaseParams(it, viewModelScope)) }
+        .cachedIn(viewModelScope)
 
-    override val state: StateFlow<QuerySearchCharactersState> = combine(status, query) { status, query ->
-        QuerySearchCharactersState(status, query)
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), QuerySearchCharactersState(status.value, query.value))
+    override val state: StateFlow<QuerySearchCharactersState> = query
+        .map { QuerySearchCharactersState(it) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), QuerySearchCharactersState(query.value))
 
     override suspend fun applyIntent(intent: QuerySearchCharactersIntent) {
         when (intent) {
@@ -33,11 +34,8 @@ class QuerySearchCharactersViewModel(querySearchedCharactersUseCase: QueryCharac
 }
 
 data class QuerySearchCharactersState(
-    val status: Status,
     val query: String,
-) {
-    data class Status(val loading: Boolean = true, val error: ErrorResult? = null)
-}
+)
 
 
 sealed interface QuerySearchCharactersIntent {
