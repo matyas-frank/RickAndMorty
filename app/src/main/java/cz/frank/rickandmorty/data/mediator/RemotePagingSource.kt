@@ -12,6 +12,14 @@ class RemotePagingSource(
     override suspend fun load(
         params: LoadParams<Int>
     ): LoadResult<Int, CharacterSimple> {
+        if (query.isBlank()) {
+            return LoadResult.Page(
+                data = listOf(),
+                prevKey = null, // Only paging forward.
+                nextKey = null
+            )
+        }
+
         val nextPageNumber = params.key ?: 1
         val response = remoteSource.getCharacters(nextPageNumber, query)
         return response.fold(
@@ -27,13 +35,6 @@ class RemotePagingSource(
     }
 
     override fun getRefreshKey(state: PagingState<Int, CharacterSimple>): Int? {
-        // Try to find the page key of the closest page to anchorPosition from
-        // either the prevKey or the nextKey; you need to handle nullability
-        // here.
-        //  * prevKey == null -> anchorPage is the first page.
-        //  * nextKey == null -> anchorPage is the last page.
-        //  * both prevKey and nextKey are null -> anchorPage is the
-        //    initial page, so return null.
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
