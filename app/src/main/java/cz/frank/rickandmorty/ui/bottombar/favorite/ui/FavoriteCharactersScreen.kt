@@ -2,13 +2,11 @@ package cz.frank.rickandmorty.ui.bottombar.favorite.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,7 +25,6 @@ import cz.frank.rickandmorty.ui.detail.navigation.DetailCharacterNavDestination
 import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import cz.frank.rickandmorty.utils.ui.CharacterList
 import cz.frank.rickandmorty.utils.ui.ProcessEvents
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -55,10 +52,12 @@ private fun FavoriteCharactersRoute(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AllCharactersScreen(characters: LazyPagingItems<CharacterSimple>, state: FavoriteCharactersState, onIntent: (FavoriteCharactersIntent) -> Unit) {
-    Column {
-        Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar() }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    Column(Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
+        Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(scrollBehavior) }
         Surface(Modifier.zIndex(1f).fillMaxSize()) {
             CharacterList(characters, onCharacterClick = { onIntent(FavoriteCharactersIntent.OnItemTapped(it)) })
         }
@@ -67,11 +66,12 @@ private fun AllCharactersScreen(characters: LazyPagingItems<CharacterSimple>, st
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBar() {
+private fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
     TopAppBar(
         title = {
             Text(stringResource(R.string.favorite_characters_title))
         },
+        scrollBehavior = scrollBehavior
     )
 }
 

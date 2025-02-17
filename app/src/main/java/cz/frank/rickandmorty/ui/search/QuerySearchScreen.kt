@@ -1,8 +1,8 @@
 package cz.frank.rickandmorty.ui.search
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
@@ -11,6 +11,7 @@ import androidx.compose.material3.SearchBarDefaults.InputField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,15 +58,22 @@ private fun QuerySearchCharactersRoute(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun QuerySearchCharactersScreen(
     characters: LazyPagingItems<CharacterSimple>,
     state: QuerySearchCharactersState,
     onIntent: (QuerySearchCharactersIntent) -> Unit
 ) {
-    Column {
-        Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(state.query, onIntent) }
-        Surface(Modifier.zIndex(1f).fillMaxSize()) {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+
+    Scaffold(
+        Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(state.query, onIntent, scrollBehavior) }
+        }
+    ) {
+        Surface(Modifier.zIndex(1f).fillMaxSize().padding(it)) {
             CharacterList(
                 characters,
                 areCharacterCardsTransparent = true,
@@ -77,7 +85,7 @@ private fun QuerySearchCharactersScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBar(query: String, onIntent: (QuerySearchCharactersIntent) -> Unit) {
+private fun TopBar(query: String, onIntent: (QuerySearchCharactersIntent) -> Unit, scrollBehavior: TopAppBarScrollBehavior) {
     TopAppBar(
         title = {
             InputField(
@@ -101,7 +109,7 @@ private fun TopBar(query: String, onIntent: (QuerySearchCharactersIntent) -> Uni
                 }
             }
         },
-
+        scrollBehavior = scrollBehavior
     )
 }
 

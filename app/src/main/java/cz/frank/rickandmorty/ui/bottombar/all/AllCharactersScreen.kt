@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,10 +58,12 @@ private fun AllCharactersRoute(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AllCharactersScreen(items: LazyPagingItems<CharacterSimple>, state: AllCharactersState, onIntent: (AllCharactersIntent) -> Unit) {
-    Column {
-        Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(onIntent) }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    Column(Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
+        Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(onIntent, scrollBehavior) }
         Surface(Modifier.zIndex(1f).fillMaxSize()) {
             CharacterList(items, onCharacterClick = { onIntent(AllCharactersIntent.OnItemTapped(it)) })
         }
@@ -69,7 +72,7 @@ private fun AllCharactersScreen(items: LazyPagingItems<CharacterSimple>, state: 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBar(onIntent: (AllCharactersIntent) -> Unit) {
+private fun TopBar(onIntent: (AllCharactersIntent) -> Unit, scrollBehavior: TopAppBarScrollBehavior) {
     TopAppBar(
         title = {
             Text(stringResource(R.string.all_characters_title))
@@ -82,7 +85,8 @@ private fun TopBar(onIntent: (AllCharactersIntent) -> Unit) {
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }
-        }
+        },
+        scrollBehavior = scrollBehavior
     )
 }
 
