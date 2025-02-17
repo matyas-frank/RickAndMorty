@@ -29,7 +29,6 @@ import cz.frank.rickandmorty.ui.search.navigation.QuerySearchedCharactersNavDest
 import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import cz.frank.rickandmorty.utils.ui.CharacterList
 import cz.frank.rickandmorty.utils.ui.ProcessEvents
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -118,7 +117,7 @@ private fun Preview() {
         CharacterSimple(7,"Eric Stoltz Mask Morty", "Alive", "https://rickandmortyapi.com/api/character/avatar/6.jpeg"),
         CharacterSimple(8,"Abradolf Lincler", "Unknown", "https://rickandmortyapi.com/api/character/avatar/7.jpeg")
     )
-    val state = QuerySearchCharactersState(characters.toImmutableList(), status = QuerySearchCharactersState.Status(loading = false), "")
+    val state = QuerySearchCharactersState(status = QuerySearchCharactersState.Status(loading = false), "")
     RickAndMortyTheme { QuerySearchCharactersScreen (flowOf(PagingData.from(characters)).collectAsLazyPagingItems(), state) { } }
 }
 

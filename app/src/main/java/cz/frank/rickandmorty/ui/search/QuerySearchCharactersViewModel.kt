@@ -1,34 +1,24 @@
 package cz.frank.rickandmorty.ui.search
 
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import cz.frank.rickandmorty.domain.model.CharacterSimple
+import cz.frank.rickandmorty.domain.usecase.QueryCharactersUseCase
 import cz.frank.rickandmorty.utils.ErrorResult
 import cz.frank.rickandmorty.utils.ui.BaseViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import kotlin.time.Duration.Companion.milliseconds
 
-class QuerySearchCharactersViewModel : BaseViewModel<QuerySearchCharactersState, QuerySearchCharactersIntent, QuerySearchCharactersEvent>() {
+class QuerySearchCharactersViewModel(querySearchedCharactersUseCase: QueryCharactersUseCase) : BaseViewModel<QuerySearchCharactersState, QuerySearchCharactersIntent, QuerySearchCharactersEvent>() {
     private val status = MutableStateFlow(QuerySearchCharactersState.Status())
-    private val characters = MutableStateFlow(
-        persistentListOf(
-            CharacterSimple(1, "Rick Sanchez", "Alive", "https://rickandmortyapi.com/api/character/avatar/1.jpeg", true),
-            CharacterSimple(3, "Morty Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/2.jpeg", true),
-            CharacterSimple(4, "Summer Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/3.jpeg", true),
-            CharacterSimple(5, "Beth Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/4.jpeg"),
-            CharacterSimple(6, "Jerry Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/5.jpeg"),
-            CharacterSimple(7, "Eric Stoltz Mask Morty", "Alive", "https://rickandmortyapi.com/api/character/avatar/6.jpeg"),
-            CharacterSimple(8, "Abradolf Lincler", "Unknown", "https://rickandmortyapi.com/api/character/avatar/7.jpeg")
-        )
-    )
     private val query = MutableStateFlow("")
 
-    val charactersFlow = flowOf(PagingData.from(characters.value))
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+    val charactersFlow = query.debounce(400.milliseconds).flatMapLatest { querySearchedCharactersUseCase(it) }
 
-    override val state: StateFlow<QuerySearchCharactersState> = combine(status, characters, query) { status, characters, query ->
-        QuerySearchCharactersState(characters, status, query)
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), QuerySearchCharactersState(characters.value, status.value, query.value))
+    override val state: StateFlow<QuerySearchCharactersState> = combine(status, query) { status, query ->
+        QuerySearchCharactersState(status, query)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), QuerySearchCharactersState(status.value, query.value))
 
     override suspend fun applyIntent(intent: QuerySearchCharactersIntent) {
         when (intent) {
@@ -41,7 +31,6 @@ class QuerySearchCharactersViewModel : BaseViewModel<QuerySearchCharactersState,
 }
 
 data class QuerySearchCharactersState(
-    val characterSimple: ImmutableList<CharacterSimple>,
     val status: Status,
     val query: String,
 ) {
