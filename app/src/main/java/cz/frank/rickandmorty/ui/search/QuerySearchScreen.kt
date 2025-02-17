@@ -19,6 +19,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import cz.frank.rickandmorty.R
 import cz.frank.rickandmorty.domain.model.CharacterSimple
 import cz.frank.rickandmorty.ui.detail.navigation.DetailCharacterNavDestination
@@ -27,6 +30,7 @@ import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import cz.frank.rickandmorty.utils.ui.CharacterList
 import cz.frank.rickandmorty.utils.ui.ProcessEvents
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.viewmodel.koinViewModel
 
 fun NavGraphBuilder.querySearchCharactersNavDestination(
@@ -49,18 +53,22 @@ private fun QuerySearchCharactersRoute(
         }
     }
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    QuerySearchCharactersScreen(state, viewModel::onIntent)
+    val characters = viewModel.charactersFlow.collectAsLazyPagingItems()
+    QuerySearchCharactersScreen(characters, state, viewModel::onIntent)
 }
 
 
 @Composable
-private fun QuerySearchCharactersScreen(state: QuerySearchCharactersState, onIntent: (QuerySearchCharactersIntent) -> Unit) {
+private fun QuerySearchCharactersScreen(
+    characters: LazyPagingItems<CharacterSimple>,
+    state: QuerySearchCharactersState,
+    onIntent: (QuerySearchCharactersIntent) -> Unit
+) {
     Column {
         Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(state.query, onIntent) }
         Surface(Modifier.zIndex(1f).fillMaxSize()) {
             CharacterList(
-                state.characterSimple,
+                characters,
                 areCharacterCardsTransparent = true,
                 onCharacterClick = { onIntent(QuerySearchCharactersIntent.OnItemTapped(it)) }
             )
@@ -111,6 +119,6 @@ private fun Preview() {
         CharacterSimple(8,"Abradolf Lincler", "Unknown", "https://rickandmortyapi.com/api/character/avatar/7.jpeg")
     )
     val state = QuerySearchCharactersState(characters.toImmutableList(), status = QuerySearchCharactersState.Status(loading = false), "")
-    RickAndMortyTheme { QuerySearchCharactersScreen (state) { } }
+    RickAndMortyTheme { QuerySearchCharactersScreen (flowOf(PagingData.from(characters)).collectAsLazyPagingItems(), state) { } }
 }
 

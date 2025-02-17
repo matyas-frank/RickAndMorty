@@ -17,6 +17,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import cz.frank.rickandmorty.R
 import cz.frank.rickandmorty.domain.model.CharacterSimple
 import cz.frank.rickandmorty.ui.bottombar.favorite.navigation.FavoriteCharactersNavDestination
@@ -25,6 +28,7 @@ import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import cz.frank.rickandmorty.utils.ui.CharacterList
 import cz.frank.rickandmorty.utils.ui.ProcessEvents
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.viewmodel.koinViewModel
 
 fun NavGraphBuilder.favoriteCharactersNavDestination(
@@ -46,17 +50,17 @@ private fun FavoriteCharactersRoute(
         }
     }
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    AllCharactersScreen(state, viewModel::onIntent)
+    val characters = viewModel.favoriteCharactersFlow.collectAsLazyPagingItems()
+    AllCharactersScreen(characters, state, viewModel::onIntent)
 }
 
 
 @Composable
-private fun AllCharactersScreen(state: FavoriteCharactersState, onIntent: (FavoriteCharactersIntent) -> Unit) {
+private fun AllCharactersScreen(characters: LazyPagingItems<CharacterSimple>, state: FavoriteCharactersState, onIntent: (FavoriteCharactersIntent) -> Unit) {
     Column {
         Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar() }
         Surface(Modifier.zIndex(1f).fillMaxSize()) {
-            CharacterList(state.characterSimple, onCharacterClick = { onIntent(FavoriteCharactersIntent.OnItemTapped(it)) })
+            CharacterList(characters, onCharacterClick = { onIntent(FavoriteCharactersIntent.OnItemTapped(it)) })
         }
     }
 }
@@ -84,5 +88,5 @@ private fun Preview() {
         CharacterSimple(8,"Abradolf Lincler", "Unknown", "https://rickandmortyapi.com/api/character/avatar/7.jpeg", true)
     )
     val state = FavoriteCharactersState(characters.toImmutableList(), status = FavoriteCharactersState.Status(loading = false))
-    RickAndMortyTheme { AllCharactersScreen(state) { } }
+    RickAndMortyTheme { AllCharactersScreen(flowOf(PagingData.from(characters)).collectAsLazyPagingItems(), state) { } }
 }

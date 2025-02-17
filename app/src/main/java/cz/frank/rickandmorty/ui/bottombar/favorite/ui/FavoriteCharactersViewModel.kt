@@ -1,6 +1,7 @@
 package cz.frank.rickandmorty.ui.bottombar.favorite.ui
 
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import cz.frank.rickandmorty.domain.model.CharacterSimple
 import cz.frank.rickandmorty.utils.ErrorResult
 import cz.frank.rickandmorty.utils.ui.BaseViewModel
@@ -17,6 +18,8 @@ class FavoriteCharactersViewModel : BaseViewModel<FavoriteCharactersState, Favor
             CharacterSimple(4, "Summer Smith", "Alive", "https://rickandmortyapi.com/api/character/avatar/3.jpeg", true),
         )
     )
+
+    val favoriteCharactersFlow = flowOf(PagingData.from(characters.value))
 
     override val state: StateFlow<FavoriteCharactersState> = combine(status, characters) { status, characters ->
         FavoriteCharactersState(characters, status)

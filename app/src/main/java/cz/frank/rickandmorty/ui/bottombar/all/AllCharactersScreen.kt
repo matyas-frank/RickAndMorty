@@ -16,6 +16,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import cz.frank.rickandmorty.R
 import cz.frank.rickandmorty.domain.model.CharacterSimple
 import cz.frank.rickandmorty.ui.bottombar.all.navigation.AllCharactersNavDestination
@@ -25,6 +28,7 @@ import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import cz.frank.rickandmorty.utils.ui.CharacterList
 import cz.frank.rickandmorty.utils.ui.ProcessEvents
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.viewmodel.koinViewModel
 
 fun NavGraphBuilder.allCharactersNavDestination(
@@ -48,17 +52,18 @@ private fun AllCharactersRoute(
         }
     }
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val items = viewModel.allCharactersFlow.collectAsLazyPagingItems()
 
-    AllCharactersScreen(state, viewModel::onIntent)
+    AllCharactersScreen(items, state, viewModel::onIntent)
 }
 
 
 @Composable
-private fun AllCharactersScreen(state: State, onIntent: (AllCharactersIntent) -> Unit) {
+private fun AllCharactersScreen(items: LazyPagingItems<CharacterSimple>, state: State, onIntent: (AllCharactersIntent) -> Unit) {
     Column {
         Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(onIntent) }
         Surface(Modifier.zIndex(1f).fillMaxSize()) {
-            CharacterList(state.characterSimple, onCharacterClick = { onIntent(AllCharactersIntent.OnItemTapped(it)) })
+            CharacterList(items, onCharacterClick = { onIntent(AllCharactersIntent.OnItemTapped(it)) })
         }
     }
 }
@@ -94,6 +99,7 @@ private fun Preview() {
         CharacterSimple(7,"Eric Stoltz Mask Morty", "Alive", "https://rickandmortyapi.com/api/character/avatar/6.jpeg"),
         CharacterSimple(8,"Abradolf Lincler", "Unknown", "https://rickandmortyapi.com/api/character/avatar/7.jpeg")
     )
-    val state = State(characters.toImmutableList(), status = State.Status(loading = false))
-    RickAndMortyTheme { AllCharactersScreen(state) { } }
+    val state = State(characters.toImmutableList(), State.Status(false))
+    val data = flowOf(PagingData.from(characters)).collectAsLazyPagingItems()
+    RickAndMortyTheme { AllCharactersScreen(items = data,state) { } }
 }

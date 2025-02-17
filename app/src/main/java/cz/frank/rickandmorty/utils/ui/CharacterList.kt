@@ -3,7 +3,6 @@ package cz.frank.rickandmorty.utils.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,6 +18,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -28,19 +30,22 @@ import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import io.github.fornewid.placeholder.foundation.PlaceholderHighlight
 import io.github.fornewid.placeholder.material3.placeholder
 import io.github.fornewid.placeholder.material3.shimmer
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun CharacterList(
-    characters: ImmutableList<CharacterSimple>,
+    characters: LazyPagingItems<CharacterSimple>,
     modifier: Modifier = Modifier,
     areCharacterCardsTransparent: Boolean = false,
     onCharacterClick: (Long) -> Unit
 ) {
     LazyColumn(modifier) {
-        items(characters, key = { it.id }) {
-            CharacterItem(it, areCharacterCardsTransparent, onCharacterClick)
+        items(characters.itemCount) { index ->
+            val item = characters[index]
+            if (item != null) {
+                CharacterItem(item, areCharacterCardsTransparent, onCharacterClick)
+            }
         }
     }
 }
@@ -127,11 +132,10 @@ private fun CharacterListSearchPreview(@PreviewParameter(PreviewProvider::class)
     RickAndMortyTheme(state.isDarkTheme) {
         Scaffold {
             CharacterList(
-                characters.toImmutableList(),
+                flowOf(PagingData.from(characters.toImmutableList())).collectAsLazyPagingItems(),
                 Modifier.padding(it),
-                areCharacterCardsTransparent = state.areCharacterCardsTransparent,
-                {}
-            )
+                areCharacterCardsTransparent = state.areCharacterCardsTransparent
+            ) {}
         }
     }
 }

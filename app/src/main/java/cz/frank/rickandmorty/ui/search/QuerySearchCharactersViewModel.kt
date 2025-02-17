@@ -1,6 +1,7 @@
 package cz.frank.rickandmorty.ui.search
 
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import cz.frank.rickandmorty.domain.model.CharacterSimple
 import cz.frank.rickandmorty.utils.ErrorResult
 import cz.frank.rickandmorty.utils.ui.BaseViewModel
@@ -22,6 +23,8 @@ class QuerySearchCharactersViewModel : BaseViewModel<QuerySearchCharactersState,
         )
     )
     private val query = MutableStateFlow("")
+
+    val charactersFlow = flowOf(PagingData.from(characters.value))
 
     override val state: StateFlow<QuerySearchCharactersState> = combine(status, characters, query) { status, characters, query ->
         QuerySearchCharactersState(characters, status, query)

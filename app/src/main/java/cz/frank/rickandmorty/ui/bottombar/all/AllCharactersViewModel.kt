@@ -1,6 +1,7 @@
 package cz.frank.rickandmorty.ui.bottombar.all
 
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import cz.frank.rickandmorty.domain.model.CharacterSimple
 import cz.frank.rickandmorty.utils.ErrorResult
 import cz.frank.rickandmorty.utils.ui.BaseViewModel
@@ -21,6 +22,8 @@ class AllCharactersViewModel : BaseViewModel<State, AllCharactersIntent, AllChar
             CharacterSimple(8, "Abradolf Lincler", "Unknown", "https://rickandmortyapi.com/api/character/avatar/7.jpeg")
         )
     )
+
+    val allCharactersFlow = flowOf(PagingData.from(characters.value))
 
     override val state: StateFlow<State> = combine(status, characters) { status, characters ->
         State(characters, status)
