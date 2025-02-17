@@ -9,5 +9,6 @@ interface CharactersRepository {
     fun pagedSearchItems(query: String): Flow<PagingData<CharacterSimple>>
     fun pagedSearchItems(): Flow<PagingData<CharacterSimple>>
     fun favoriteItems(): Flow<PagingData<CharacterSimple>>
-    suspend fun detailItem(id: Long): Result<Character>
+    fun detailItem(id: Long): Flow<Result<Character>>
+    suspend fun changeFavoriteStatus(id: Long, isFavorite: Boolean)
 }

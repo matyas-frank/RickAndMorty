@@ -4,7 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import cz.frank.rickandmorty.domain.model.Character
-import cz.frank.rickandmorty.domain.usecase.DetailCharacterUseCase
+import cz.frank.rickandmorty.domain.usecase.ChangeFavoriteStatusUseCase
+import cz.frank.rickandmorty.domain.usecase.ChangeFavoriteStatusUseCaseParams
+import cz.frank.rickandmorty.domain.usecase.GetDetailCharacterUseCase
 import cz.frank.rickandmorty.ui.detail.navigation.DetailCharacterNavDestination
 import cz.frank.rickandmorty.utils.ErrorResult
 import cz.frank.rickandmorty.utils.ui.BaseViewModel
@@ -13,22 +15,22 @@ import kotlinx.coroutines.launch
 
 class DetailCharacterViewModel(
     savedStateHandle: SavedStateHandle,
-    useCase: DetailCharacterUseCase
-)  : BaseViewModel<DetailCharacterState, DetailCharacterIntent, DetailCharacterEvent>() {
+    getDetailCharacterUseCase: GetDetailCharacterUseCase,
+    private val changeFavoriteStatusUseCase: ChangeFavoriteStatusUseCase,
+) : BaseViewModel<DetailCharacterState, DetailCharacterIntent, DetailCharacterEvent>() {
     private val status = MutableStateFlow(DetailCharacterState.Status())
-    private val character = MutableStateFlow<Character?>(null)
 
-    init {
-        val profile = savedStateHandle.toRoute<DetailCharacterNavDestination>()
-        viewModelScope.launch {
-            useCase(profile.id).onSuccess {
-                character.value = it
-            }
-        }
-    }
+    private val characterId = savedStateHandle.toRoute<DetailCharacterNavDestination>().id
 
-    override val state: StateFlow<DetailCharacterState> = combine(status, character) { status, characters ->
-        DetailCharacterState(characters, status)
+    private val character = getDetailCharacterUseCase(characterId).map {
+        it.fold(
+            onSuccess = { it },
+            onFailure = { null }
+        )
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
+    override val state: StateFlow<DetailCharacterState> = combine(status, character) { status, character ->
+        DetailCharacterState(character, status)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), DetailCharacterState(character.value, status.value))
 
     override suspend fun applyIntent(intent: DetailCharacterIntent) {
@@ -39,7 +41,7 @@ class DetailCharacterViewModel(
     }
 
     private fun onFavoriteTapped(isFavorite: Boolean) {
-        character.update { it?.copy(isFavorite = isFavorite) }
+        viewModelScope.launch { changeFavoriteStatusUseCase(ChangeFavoriteStatusUseCaseParams(characterId, isFavorite)) }
     }
 }
 

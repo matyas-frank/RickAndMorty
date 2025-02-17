@@ -1,10 +1,7 @@
 package cz.frank.rickandmorty.infrastructure.database
 
 import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import cz.frank.rickandmorty.data.local.model.CharacterSimpleWithFavoriteLocalDto
 import cz.frank.rickandmorty.infrastructure.database.entity.CharacterEntity
 import cz.frank.rickandmorty.infrastructure.database.entity.FavoriteEntity
@@ -21,11 +18,11 @@ interface CharactersDao {
     @Query("SELECT * FROM favorites")
     fun allFavorites() : Flow<List<FavoriteEntity>>
 
-    @Insert
-    fun addFavorite(favoriteEntity: FavoriteEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addFavorite(favoriteEntity: FavoriteEntity)
 
     @Delete
-    fun removeFavorite(favoriteEntity: FavoriteEntity)
+    suspend fun removeFavorite(favoriteEntity: FavoriteEntity)
 
     @Insert
     fun addCharacters(vararg characterEntity: CharacterEntity)
@@ -35,4 +32,7 @@ interface CharactersDao {
 
     @Query("DELETE FROM favorites")
     fun deleteFavorites()
+
+    @Query("SELECT * FROM favorites WHERE id LIKE :id LIMIT 1")
+    fun isFavorite(id: Long) : Flow<FavoriteEntity?>
 }

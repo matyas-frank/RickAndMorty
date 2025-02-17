@@ -9,8 +9,10 @@ import cz.frank.rickandmorty.infrastructure.database.CharactersDao
 import cz.frank.rickandmorty.infrastructure.database.RickAndMortyDatabase
 import cz.frank.rickandmorty.infrastructure.database.entity.FavoriteEntity
 import cz.frank.rickandmorty.infrastructure.database.entity.toEntity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class CharactersLocalSourceImpl(
     private val charactersDao: CharactersDao,
@@ -18,9 +20,9 @@ class CharactersLocalSourceImpl(
 ) : CharactersLocalSource {
     override fun allCharacters(): PagingSource<Int, CharacterSimpleWithFavoriteLocalDto> = charactersDao.allCharacters()
 
-    override fun addFavorite(favoriteId: Long) = charactersDao.addFavorite(FavoriteEntity(favoriteId))
+    override suspend fun addFavorite(favoriteId: Long) = withContext(Dispatchers.IO) { charactersDao.addFavorite(FavoriteEntity(favoriteId)) }
 
-    override fun removeFavorite(favoriteId: Long) = charactersDao.removeFavorite(FavoriteEntity(favoriteId))
+    override suspend fun removeFavorite(favoriteId: Long) = withContext(Dispatchers.IO) { charactersDao.removeFavorite(FavoriteEntity(favoriteId)) }
 
     override fun addCharacters(characterEntities: List<CharacterSimple>) = charactersDao.addCharacters(*characterEntities.map { it.toEntity() }.toTypedArray())
 
@@ -35,4 +37,6 @@ class CharactersLocalSourceImpl(
     override fun allFavoritesFlow(): Flow<List<Long>> = charactersDao.allFavorites().map { it.map { it.id } }
 
     override fun favoriteCharacters(): PagingSource<Int, CharacterSimpleWithFavoriteLocalDto> = charactersDao.favoriteCharacters()
+
+    override fun isFavorite(id: Long) = charactersDao.isFavorite(id).map { it != null }
 }

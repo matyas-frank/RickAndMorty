@@ -12,6 +12,7 @@ import cz.frank.rickandmorty.domain.model.CharacterSimple
 import cz.frank.rickandmorty.domain.repository.CharactersRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class CharactersRepositoryImpl(
@@ -46,7 +47,15 @@ class CharactersRepositoryImpl(
         ).flow.toDomain()
     }
 
-    override suspend fun detailItem(id: Long): Result<Character> = remoteSource.getCharacter(id)
+    override fun detailItem(id: Long): Flow<Result<Character>> = flow {
+        emit(remoteSource.getCharacter(id))
+    }.combine(localSource.isFavorite(id)) { character, isFavorite ->
+        character.map { it.copy(isFavorite = isFavorite) }
+    }
+
+    override suspend fun changeFavoriteStatus(id: Long, isFavorite: Boolean) = with(localSource) {
+        if (isFavorite) addFavorite(id) else removeFavorite(id)
+    }
 
     companion object {
         private const val PAGE_SIZE = 50

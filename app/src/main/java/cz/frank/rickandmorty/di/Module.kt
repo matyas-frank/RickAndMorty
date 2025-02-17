@@ -59,7 +59,8 @@ private fun Module.useCases() {
     singleOf(::AlLCharactersUseCaseImpl) bind AllCharactersUseCase::class
     singleOf(::QueryCharactersUseCaseImpl) bind QueryCharactersUseCase::class
     singleOf(::FavoriteCharactersUseCaseImpl) bind FavoriteCharactersUseCase::class
-    singleOf(::DetailCharacterUseCaseImpl) bind DetailCharacterUseCase::class
+    singleOf(::DetailCharacterUseCaseImpl) bind GetDetailCharacterUseCase::class
+    singleOf(::ChangeFavoriteStatusUseCaseImpl) bind ChangeFavoriteStatusUseCase::class
 }
 
 
