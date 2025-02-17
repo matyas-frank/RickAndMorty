@@ -12,7 +12,7 @@ interface CharactersDao {
     @Query("SELECT characters.id as id,name,status,image,favorites.id as idFromFavorites FROM characters LEFT JOIN favorites ON characters.id == favorites.id")
     fun allCharacters(): PagingSource<Int, CharacterSimpleWithFavoriteLocalDto>
 
-    @Query("SELECT characters.id as id,name,status,image,favorites.id as idFromFavorites FROM characters LEFT JOIN favorites ON characters.id == favorites.id WHERE idFromFavorites LIKE NOT NULL")
+    @Query("SELECT characters.id as id,name,status,image,favorites.id as idFromFavorites FROM characters LEFT JOIN favorites ON characters.id == favorites.id WHERE idFromFavorites")
     fun favoriteCharacters(): PagingSource<Int, CharacterSimpleWithFavoriteLocalDto>
 
     @Query("SELECT * FROM favorites")
