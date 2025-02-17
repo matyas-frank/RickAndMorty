@@ -9,6 +9,8 @@ import cz.frank.rickandmorty.data.source.RemoteKeySource
 import cz.frank.rickandmorty.domain.repository.CharactersRepository
 import cz.frank.rickandmorty.domain.usecase.AlLCharactersUseCaseImpl
 import cz.frank.rickandmorty.domain.usecase.AllCharactersUseCase
+import cz.frank.rickandmorty.domain.usecase.QueryCharactersUseCase
+import cz.frank.rickandmorty.domain.usecase.QueryCharactersUseCaseImpl
 import cz.frank.rickandmorty.infrastructure.database.RickAndMortyDatabase
 import cz.frank.rickandmorty.infrastructure.remote.CharactersHttpClient
 import cz.frank.rickandmorty.infrastructure.remote.CharactersService
@@ -58,6 +60,7 @@ private fun Module.repositories() {
 
 private fun Module.useCases() {
     singleOf(::AlLCharactersUseCaseImpl) bind AllCharactersUseCase::class
+    singleOf(::QueryCharactersUseCaseImpl) bind QueryCharactersUseCase::class
 }
 
 
