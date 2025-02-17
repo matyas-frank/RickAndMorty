@@ -20,6 +20,7 @@ class AllCharactersViewModel(allCharactersFlowUseCase: AllCharactersUseCase) : B
             is AllCharactersIntent.OnSearchTapped -> emitEvent(AllCharactersEvent.GoToQuerySearch)
             is AllCharactersIntent.OnItemTapped -> emitEvent(AllCharactersEvent.GoToDetail(intent.id))
             is AllCharactersIntent.OnBackTapped -> emitEvent(AllCharactersEvent.GoBack)
+            is AllCharactersIntent.OnRetryTapped -> emitEvent(AllCharactersEvent.RetryRefresh)
         }
     }
 }
@@ -31,10 +32,12 @@ sealed interface AllCharactersIntent {
     data object OnSearchTapped : AllCharactersIntent
     data class OnItemTapped(val id: Long) : AllCharactersIntent
     data object OnBackTapped : AllCharactersIntent
+    data object OnRetryTapped : AllCharactersIntent
 }
 
 sealed interface AllCharactersEvent {
     data object GoBack : AllCharactersEvent
     data class GoToDetail(val id: Long) : AllCharactersEvent
     data object GoToQuerySearch : AllCharactersEvent
+    data object RetryRefresh : AllCharactersEvent
 }
