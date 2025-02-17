@@ -1,13 +1,17 @@
 package cz.frank.rickandmorty.ui.bottombar.favorite.ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -25,6 +29,7 @@ import cz.frank.rickandmorty.ui.detail.navigation.DetailCharacterNavDestination
 import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import cz.frank.rickandmorty.utils.ui.CharacterList
 import cz.frank.rickandmorty.utils.ui.ProcessEvents
+import cz.frank.rickandmorty.utils.ui.Space
 import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -58,8 +63,19 @@ private fun AllCharactersScreen(characters: LazyPagingItems<CharacterSimple>, st
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Column(Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
         Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(scrollBehavior) }
-        Surface(Modifier.zIndex(1f).fillMaxSize()) {
-            CharacterList(characters, onCharacterClick = { onIntent(FavoriteCharactersIntent.OnItemTapped(it)) })
+        Surface(
+            Modifier
+                .zIndex(1f)
+                .fillMaxSize()
+        ) {
+            val uiState by rememberUpdatedState(state.getUIState(characters))
+            AnimatedContent(targetState = uiState, label = "Favorite screen content animation") {
+                when (it) {
+                    State.EMPTY -> EmptyScreen()
+                    State.LOADING -> LoadingScreen()
+                    State.NOT_EMPTY -> CharacterList(characters, onCharacterClick = { onIntent(FavoriteCharactersIntent.OnItemTapped(it)) })
+                }
+            }
         }
     }
 }
@@ -73,6 +89,46 @@ private fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
         },
         scrollBehavior = scrollBehavior
     )
+}
+
+@Composable
+private fun EmptyScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(Space.large),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = stringResource(R.string.favorite_characters_no_favorites_headline),
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.headlineLarge,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(Space.small))
+        Text(
+            text = stringResource(R.string.favorite_characters_no_favorites_support_message),
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Composable
+private fun LoadingScreen() {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
+    }
+}
+
+private fun FavoriteCharactersState.getUIState(characters: LazyPagingItems<CharacterSimple>) = when {
+    loading -> State.LOADING
+    characters.itemCount == 0 -> State.EMPTY
+    else -> State.NOT_EMPTY
+}
+
+private enum class State {
+    EMPTY, NOT_EMPTY, LOADING
 }
 
 @Preview

@@ -1,16 +1,19 @@
 package cz.frank.rickandmorty.ui.bottombar.favorite.ui
 
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import cz.frank.rickandmorty.domain.usecase.FavoriteCharactersUseCase
-import cz.frank.rickandmorty.utils.ErrorResult
 import cz.frank.rickandmorty.utils.ui.BaseViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 
 class FavoriteCharactersViewModel(favoriteCharactersUseCase: FavoriteCharactersUseCase) : BaseViewModel<FavoriteCharactersState, FavoriteCharactersIntent, FavoriteCharactersEvent>() {
     private val _state = MutableStateFlow(FavoriteCharactersState())
 
     val favoriteCharactersFlow = favoriteCharactersUseCase()
+        .cachedIn(viewModelScope)
+        .onStart { _state.update { it.copy(loading = true) } }
+        .onEach { _state.update { it.copy(loading = false) } }
+
     override val state: StateFlow<FavoriteCharactersState> = _state.asStateFlow()
 
     override suspend fun applyIntent(intent: FavoriteCharactersIntent) {
@@ -20,8 +23,7 @@ class FavoriteCharactersViewModel(favoriteCharactersUseCase: FavoriteCharactersU
     }
 }
 
-data class FavoriteCharactersState(val loading: Boolean = true, val error: ErrorResult? = null)
-
+data class FavoriteCharactersState(val loading: Boolean = true)
 
 sealed interface FavoriteCharactersIntent {
     data class OnItemTapped(val id: Long) : FavoriteCharactersIntent
