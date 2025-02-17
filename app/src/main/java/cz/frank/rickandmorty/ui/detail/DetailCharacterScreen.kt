@@ -90,13 +90,11 @@ private fun TopBar(name: String, isFavorite: Boolean, onIntent: (DetailCharacter
             }
         },
         actions = {
-            IconButton(onClick = { onIntent(DetailCharacterIntent.OnFavoriteTapped(isFavorite)) }) {
-                IconToggleButton(isFavorite, onCheckedChange = { onIntent(DetailCharacterIntent.OnFavoriteTapped(it)) }) {
-                    if (isFavorite) {
-                        Icon(painterResource(R.drawable.ic_star), stringResource(R.string.detail_character_mark_not_favorite_description))
-                    } else {
-                        Icon(painterResource(R.drawable.ic_star_empty), stringResource(R.string.detail_character_mark_favorite_description))
-                    }
+            IconToggleButton(isFavorite, onCheckedChange = { onIntent(DetailCharacterIntent.OnFavoriteTapped(it)) }) {
+                if (isFavorite) {
+                    Icon(painterResource(R.drawable.ic_star), stringResource(R.string.detail_character_mark_not_favorite_description))
+                } else {
+                    Icon(painterResource(R.drawable.ic_star_empty), stringResource(R.string.detail_character_mark_favorite_description))
                 }
             }
         }
