@@ -9,6 +9,8 @@ import cz.frank.rickandmorty.infrastructure.database.CharactersDao
 import cz.frank.rickandmorty.infrastructure.database.RickAndMortyDatabase
 import cz.frank.rickandmorty.infrastructure.database.entity.FavoriteEntity
 import cz.frank.rickandmorty.infrastructure.database.entity.toEntity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class CharactersLocalSourceImpl(
     private val charactersDao: CharactersDao,
@@ -29,4 +31,6 @@ class CharactersLocalSourceImpl(
     override suspend fun <T> withTransaction(block: suspend CharactersLocalSource.() -> T): T {
         return database.withTransaction { block() }
     }
+
+    override fun allFavoritesFlow(): Flow<List<Long>> = charactersDao.allFavorites().map { it.map { it.id } }
 }
