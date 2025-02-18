@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,7 +49,7 @@ fun NavGraphBuilder.querySearchCharactersNavDestination(
 }
 
 @Composable
-private fun QuerySearchCharactersRoute(
+fun QuerySearchCharactersRoute(
     navHostController: NavHostController,
     viewModel: QuerySearchCharactersViewModel = koinViewModel()
 ) {
@@ -144,7 +145,7 @@ private fun SuccessScreen(
     state: QuerySearchCharactersState,
     onIntent: (QuerySearchCharactersIntent) -> Unit
 ) {
-    Column {
+    Column(Modifier.testTag(QuerySearchScreen.SUCCESS_SCREEN)) {
         AnimatedVisibility(characters.loadState.refresh is LoadState.Loading && state.query.isNotBlank()) {
             LinearProgressIndicator(Modifier.fillMaxWidth())
         }
@@ -171,5 +172,9 @@ private fun Preview() {
     )
     val state = QuerySearchCharactersState("")
     RickAndMortyTheme { QuerySearchCharactersScreen (flowOf(PagingData.from(characters)).collectAsLazyPagingItems(), state) { } }
+}
+
+object QuerySearchScreen {
+    const val SUCCESS_SCREEN = "QuerySearchSuccess"
 }
 

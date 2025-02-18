@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,7 +53,14 @@ fun CharacterList(
         }
         if (characters.loadState.append is LoadState.Error) {
             item {
-                Button(onRetryAppend, Modifier.padding(Space.small).fillMaxWidth(), shape = MaterialTheme.shapes.small) {
+                Button(
+                    onRetryAppend,
+                    Modifier
+                        .padding(Space.small)
+                        .fillMaxWidth()
+                        .testTag(CharacterList.APPEND_ERROR_BUTTON_TEST_TAG),
+                    shape = MaterialTheme.shapes.small
+                ) {
                     Text(stringResource(R.string.character_list_retry_append))
                 }
             }
@@ -160,4 +168,8 @@ private class PreviewProvider: PreviewParameterProvider<CharactersStyleState> {
         CharactersStyleState(isDarkTheme = true,  areCharacterCardsTransparent = false),
         CharactersStyleState(isDarkTheme = true,  areCharacterCardsTransparent = true),
     )
+}
+
+object CharacterList {
+    const val APPEND_ERROR_BUTTON_TEST_TAG = "CharacterListAppendError"
 }
