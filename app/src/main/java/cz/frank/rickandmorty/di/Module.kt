@@ -1,11 +1,8 @@
 package cz.frank.rickandmorty.di
 
 import cz.frank.rickandmorty.data.mediator.RemoteCharactersMediator
-import cz.frank.rickandmorty.data.source.RemotePagingSource
 import cz.frank.rickandmorty.data.repository.CharactersRepositoryImpl
-import cz.frank.rickandmorty.data.source.CharactersLocalSource
-import cz.frank.rickandmorty.data.source.CharactersRemoteSource
-import cz.frank.rickandmorty.data.source.RemoteKeySource
+import cz.frank.rickandmorty.data.source.*
 import cz.frank.rickandmorty.domain.repository.CharactersRepository
 import cz.frank.rickandmorty.domain.usecase.*
 import cz.frank.rickandmorty.infrastructure.database.RickAndMortyDatabase
@@ -14,6 +11,7 @@ import cz.frank.rickandmorty.infrastructure.remote.CharactersService
 import cz.frank.rickandmorty.infrastructure.source.CharactersLocalSourceImpl
 import cz.frank.rickandmorty.infrastructure.source.CharactersRemoteSourceImpl
 import cz.frank.rickandmorty.infrastructure.source.RemoteKeySourceImpl
+import cz.frank.rickandmorty.infrastructure.source.RefreshInformationSourceImpl
 import cz.frank.rickandmorty.ui.bottombar.all.AllCharactersViewModel
 import cz.frank.rickandmorty.ui.bottombar.favorite.ui.FavoriteCharactersViewModel
 import cz.frank.rickandmorty.ui.detail.DetailCharacterViewModel
@@ -42,6 +40,7 @@ private fun Module.localSource() {
     single { RickAndMortyDatabase(get()) }
     single { get<RickAndMortyDatabase>().charactersDao() }
     singleOf(::CharactersLocalSourceImpl) bind CharactersLocalSource::class
+    singleOf(::RefreshInformationSourceImpl) bind RefreshInformationSource::class
 }
 
 private fun Module.remoteSource() {

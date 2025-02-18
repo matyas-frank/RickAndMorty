@@ -1,3 +1,7 @@
 package cz.frank.rickandmorty.domain.model
 
-data class CharacterSimplePaged(val nextPage: Int?, val characters: List<CharacterSimple>)
+data class CharacterSimplePaged(
+    val nextPage: Int?,
+    val characters: List<CharacterSimple>,
+    val maxAge: Long?
+)

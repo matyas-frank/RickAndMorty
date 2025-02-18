@@ -9,7 +9,9 @@ import cz.frank.rickandmorty.infrastructure.remote.model.simple.toDomain
 
 class CharactersRemoteSourceImpl(private val charactersService: CharactersService) : CharactersRemoteSource {
     override suspend fun getCharacters(page: Int, query: String?): Result<CharacterSimplePaged> {
-        return charactersService.getCharacters(page, query).map { it.toDomain() }
+        return charactersService.getCharacters(page, query).map { (dto, header) ->
+            dto.toDomain(header.maxAge)
+        }
     }
 
     override suspend fun getCharacter(id: Long): Result<Character> {

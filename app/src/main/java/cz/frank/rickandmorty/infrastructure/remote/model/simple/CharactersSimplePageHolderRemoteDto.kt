@@ -7,4 +7,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CharactersSimplePageHolderRemoteDto(val characters: CharactersSimplePageRemoteDto)
 
-fun GRAPHQLWrapperRemoteDto<CharactersSimplePageHolderRemoteDto>.toDomain() = CharacterSimplePaged(data.characters.info.next, data.characters.results.map { it.toDomain() })
+fun GRAPHQLWrapperRemoteDto<CharactersSimplePageHolderRemoteDto>.toDomain(maxAge: Long?) =
+    CharacterSimplePaged(data.characters.info.next, data.characters.results.map { it.toDomain() }, maxAge)
