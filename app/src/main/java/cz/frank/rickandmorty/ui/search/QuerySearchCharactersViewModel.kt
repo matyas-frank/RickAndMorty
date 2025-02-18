@@ -29,7 +29,8 @@ class QuerySearchCharactersViewModel(querySearchedCharactersUseCase: QueryCharac
             is QuerySearchCharactersIntent.OnBackTapped -> emitEvent(QuerySearchCharactersEvent.GoBack)
             is QuerySearchCharactersIntent.OnQueryChanged -> query.value = intent.query
             is QuerySearchCharactersIntent.OnClearQueryTapped -> query.value = ""
-            is QuerySearchCharactersIntent.OnRetryTapped -> emitEvent(QuerySearchCharactersEvent.RetryRefresh)
+            is QuerySearchCharactersIntent.OnRefreshRetryTapped -> emitEvent(QuerySearchCharactersEvent.RetryRequest)
+            is QuerySearchCharactersIntent.OnAppendRetryTapped -> emitEvent(QuerySearchCharactersEvent.RetryRequest)
         }
     }
 }
@@ -44,11 +45,12 @@ sealed interface QuerySearchCharactersIntent {
     data object OnBackTapped : QuerySearchCharactersIntent
     data class OnQueryChanged(val query: String) : QuerySearchCharactersIntent
     data object OnClearQueryTapped : QuerySearchCharactersIntent
-    data object OnRetryTapped : QuerySearchCharactersIntent
+    data object OnRefreshRetryTapped : QuerySearchCharactersIntent
+    data object OnAppendRetryTapped : QuerySearchCharactersIntent
 }
 
 sealed interface QuerySearchCharactersEvent {
     data object GoBack : QuerySearchCharactersEvent
     data class GoToDetail(val id: Long) : QuerySearchCharactersEvent
-    data object RetryRefresh : QuerySearchCharactersEvent
+    data object RetryRequest : QuerySearchCharactersEvent
 }

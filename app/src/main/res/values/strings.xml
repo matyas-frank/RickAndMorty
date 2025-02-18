@@ -25,4 +25,5 @@
     <string name="error_screen_title">Something went wrong. Please try again later.</string>
     <string name="error_screen_support_message">Oops!</string>
     <string name="error_screen_try_again">Try Again</string>
+    <string name="character_list_retry_append">Retry append</string>
 </resources>

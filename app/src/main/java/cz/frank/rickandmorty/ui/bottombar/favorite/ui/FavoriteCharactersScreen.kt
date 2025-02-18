@@ -73,7 +73,11 @@ private fun AllCharactersScreen(characters: LazyPagingItems<CharacterSimple>, st
                 when (it) {
                     State.EMPTY -> EmptyScreen()
                     State.LOADING -> LoadingScreen()
-                    State.NOT_EMPTY -> CharacterList(characters, onCharacterClick = { onIntent(FavoriteCharactersIntent.OnItemTapped(it)) })
+                    State.NOT_EMPTY -> CharacterList(
+                        characters,
+                        onRetryAppend = {},
+                        onCharacterClick = { onIntent(FavoriteCharactersIntent.OnItemTapped(it)) }
+                    )
                 }
             }
         }

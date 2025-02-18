@@ -95,7 +95,11 @@ private fun NotEmptyScreen(
                 Text(stringResource(R.string.all_characters_search_retry_refresh))
             }
         }
-        CharacterList(items, onCharacterClick = { onIntent(AllCharactersIntent.OnItemTapped(it)) })
+        CharacterList(
+            items,
+            onRetryAppend = { onIntent(AllCharactersIntent.OnAppendRetryTapped) },
+            onCharacterClick = { onIntent(AllCharactersIntent.OnItemTapped(it)) }
+        )
     }
 }
 

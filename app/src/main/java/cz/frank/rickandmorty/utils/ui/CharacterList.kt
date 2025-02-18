@@ -13,11 +13,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -38,13 +40,21 @@ fun CharacterList(
     characters: LazyPagingItems<CharacterSimple>,
     modifier: Modifier = Modifier,
     areCharacterCardsTransparent: Boolean = false,
-    onCharacterClick: (Long) -> Unit
+    onRetryAppend: () -> Unit,
+    onCharacterClick: (Long) -> Unit,
 ) {
     LazyColumn(modifier) {
         items(characters.itemCount) { index ->
             val item = characters[index]
             if (item != null) {
                 CharacterItem(item, areCharacterCardsTransparent, onCharacterClick)
+            }
+        }
+        if (characters.loadState.append is LoadState.Error) {
+            item {
+                Button(onRetryAppend, Modifier.padding(Space.small).fillMaxWidth(), shape = MaterialTheme.shapes.small) {
+                    Text(stringResource(R.string.character_list_retry_append))
+                }
             }
         }
     }
@@ -134,7 +144,8 @@ private fun CharacterListSearchPreview(@PreviewParameter(PreviewProvider::class)
             CharacterList(
                 flowOf(PagingData.from(characters.toImmutableList())).collectAsLazyPagingItems(),
                 Modifier.padding(it),
-                areCharacterCardsTransparent = state.areCharacterCardsTransparent
+                areCharacterCardsTransparent = state.areCharacterCardsTransparent,
+                onRetryAppend = {}
             ) {}
         }
     }

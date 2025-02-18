@@ -14,6 +14,7 @@ class AllCharactersViewModel(allCharactersFlowUseCase: AllCharactersUseCase) : B
             is AllCharactersIntent.OnItemTapped -> emitEvent(AllCharactersEvent.GoToDetail(intent.id))
             is AllCharactersIntent.OnBackTapped -> emitEvent(AllCharactersEvent.GoBack)
             is AllCharactersIntent.OnRefreshRetryTapped -> emitEvent(AllCharactersEvent.RetryRequest)
+            is AllCharactersIntent.OnAppendRetryTapped -> emitEvent(AllCharactersEvent.RetryRequest)
         }
     }
 }
@@ -23,6 +24,7 @@ sealed interface AllCharactersIntent {
     data class OnItemTapped(val id: Long) : AllCharactersIntent
     data object OnBackTapped : AllCharactersIntent
     data object OnRefreshRetryTapped : AllCharactersIntent
+    data object OnAppendRetryTapped : AllCharactersIntent
 }
 
 sealed interface AllCharactersEvent {

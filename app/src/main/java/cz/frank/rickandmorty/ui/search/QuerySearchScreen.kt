@@ -56,7 +56,7 @@ private fun QuerySearchCharactersRoute(
         when (it) {
             QuerySearchCharactersEvent.GoBack -> navHostController.navigateUp()
             is QuerySearchCharactersEvent.GoToDetail -> navHostController.navigate(DetailCharacterNavDestination(it.id))
-            is QuerySearchCharactersEvent.RetryRefresh -> characters.retry()
+            is QuerySearchCharactersEvent.RetryRequest -> characters.retry()
         }
     }
     QuerySearchCharactersScreen(characters, state, viewModel::onIntent)
@@ -87,7 +87,7 @@ private fun QuerySearchCharactersScreen(
             val uiState: State = getUIState(characters)
 
             when (uiState) {
-                State.ERROR -> ErrorScreen(onRetry = { onIntent(QuerySearchCharactersIntent.OnRetryTapped) })
+                State.ERROR -> ErrorScreen(onRetry = { onIntent(QuerySearchCharactersIntent.OnRefreshRetryTapped) })
                 State.SUCCESS -> SuccessScreen(characters, state, onIntent)
             }
         }
@@ -148,6 +148,7 @@ private fun SuccessScreen(
         CharacterList(
             characters,
             areCharacterCardsTransparent = true,
+            onRetryAppend = { onIntent(QuerySearchCharactersIntent.OnAppendRetryTapped) },
             onCharacterClick = { onIntent(QuerySearchCharactersIntent.OnItemTapped(it)) }
         )
     }
