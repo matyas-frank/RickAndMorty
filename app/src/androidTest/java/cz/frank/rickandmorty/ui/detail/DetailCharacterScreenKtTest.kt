@@ -49,7 +49,6 @@ class DetailCharacterScreenKtTest {
         }
         composeTestRule.onNodeWithTag(DetailCharacterScreen.LOADING_TEST_TAG).assertIsDisplayed()
         composeTestRule.waitUntil { composeTestRule.onNodeWithTag(ErrorScreen.SCREEN_TEST_TAG).isDisplayed() }
-        composeTestRule.onNodeWithTag(ErrorScreen.SCREEN_TEST_TAG).assertIsDisplayed()
     }
 
     @Test
@@ -81,7 +80,6 @@ class DetailCharacterScreenKtTest {
         }
         composeTestRule.onNodeWithTag(DetailCharacterScreen.LOADING_TEST_TAG).assertIsDisplayed()
         composeTestRule.waitUntil { composeTestRule.onNodeWithTag(DetailCharacterScreen.SUCCESS_TEST_TAG).isDisplayed() }
-        composeTestRule.onNodeWithTag(DetailCharacterScreen.SUCCESS_TEST_TAG).assertIsDisplayed()
     }
 
     @Test
@@ -155,12 +153,10 @@ class DetailCharacterScreenKtTest {
         composeTestRule.onNodeWithTag(DetailCharacterScreen.LOADING_TEST_TAG).assertIsDisplayed()
 
         composeTestRule.waitUntil { composeTestRule.onNodeWithTag(ErrorScreen.SCREEN_TEST_TAG).isDisplayed() }
-        composeTestRule.onNodeWithTag(ErrorScreen.SCREEN_TEST_TAG).assertIsDisplayed()
         composeTestRule.onNodeWithTag(ErrorScreen.RETRY_BUTTON_TEST_TAG, useUnmergedTree = true).performClick()
 
         composeTestRule.onNodeWithTag(DetailCharacterScreen.LOADING_TEST_TAG).assertIsDisplayed()
 
         composeTestRule.waitUntil { composeTestRule.onNodeWithTag(DetailCharacterScreen.SUCCESS_TEST_TAG).isDisplayed() }
-        composeTestRule.onNodeWithTag(DetailCharacterScreen.SUCCESS_TEST_TAG).assertIsDisplayed()
     }
 }
