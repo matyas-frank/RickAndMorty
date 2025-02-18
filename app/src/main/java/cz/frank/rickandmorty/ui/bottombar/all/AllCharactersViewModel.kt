@@ -3,16 +3,9 @@ package cz.frank.rickandmorty.ui.bottombar.all
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import cz.frank.rickandmorty.domain.usecase.AllCharactersUseCase
-import cz.frank.rickandmorty.utils.ErrorResult
 import cz.frank.rickandmorty.utils.ui.BaseViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
-class AllCharactersViewModel(allCharactersFlowUseCase: AllCharactersUseCase) : BaseViewModel<AllCharactersState, AllCharactersIntent, AllCharactersEvent>() {
-    private val status = MutableStateFlow(AllCharactersState())
-    override val state: StateFlow<AllCharactersState> = status.asStateFlow()
-
+class AllCharactersViewModel(allCharactersFlowUseCase: AllCharactersUseCase) : BaseViewModel<AllCharactersIntent, AllCharactersEvent>() {
     val allCharactersFlow = allCharactersFlowUseCase().cachedIn(viewModelScope)
 
     override suspend fun applyIntent(intent: AllCharactersIntent) {
@@ -24,9 +17,6 @@ class AllCharactersViewModel(allCharactersFlowUseCase: AllCharactersUseCase) : B
         }
     }
 }
-
-data class AllCharactersState(val loading: Boolean = true, val error: ErrorResult? = null)
-
 
 sealed interface AllCharactersIntent {
     data object OnSearchTapped : AllCharactersIntent

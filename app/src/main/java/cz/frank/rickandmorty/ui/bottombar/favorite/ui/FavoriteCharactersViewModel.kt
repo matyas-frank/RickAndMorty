@@ -6,7 +6,7 @@ import cz.frank.rickandmorty.domain.usecase.FavoriteCharactersUseCase
 import cz.frank.rickandmorty.utils.ui.BaseViewModel
 import kotlinx.coroutines.flow.*
 
-class FavoriteCharactersViewModel(favoriteCharactersUseCase: FavoriteCharactersUseCase) : BaseViewModel<FavoriteCharactersState, FavoriteCharactersIntent, FavoriteCharactersEvent>() {
+class FavoriteCharactersViewModel(favoriteCharactersUseCase: FavoriteCharactersUseCase) : BaseViewModel<FavoriteCharactersIntent, FavoriteCharactersEvent>() {
     private val _state = MutableStateFlow(FavoriteCharactersState())
 
     val favoriteCharactersFlow = favoriteCharactersUseCase()
@@ -14,7 +14,7 @@ class FavoriteCharactersViewModel(favoriteCharactersUseCase: FavoriteCharactersU
         .onStart { _state.update { it.copy(loading = true) } }
         .onEach { _state.update { it.copy(loading = false) } }
 
-    override val state: StateFlow<FavoriteCharactersState> = _state.asStateFlow()
+    val state: StateFlow<FavoriteCharactersState> = _state.asStateFlow()
 
     override suspend fun applyIntent(intent: FavoriteCharactersIntent) {
         when (intent) {

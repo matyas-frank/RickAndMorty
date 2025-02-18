@@ -15,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -48,7 +47,6 @@ private fun AllCharactersRoute(
     navHostController: NavHostController,
     viewModel: AllCharactersViewModel = koinViewModel()
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
     val items = viewModel.allCharactersFlow.collectAsLazyPagingItems()
     viewModel.ProcessEvents {
         when (it) {
@@ -59,13 +57,13 @@ private fun AllCharactersRoute(
         }
     }
 
-    AllCharactersScreen(items, state, viewModel::onIntent)
+    AllCharactersScreen(items, viewModel::onIntent)
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AllCharactersScreen(items: LazyPagingItems<CharacterSimple>, state: AllCharactersState, onIntent: (AllCharactersIntent) -> Unit) {
+private fun AllCharactersScreen(items: LazyPagingItems<CharacterSimple>, onIntent: (AllCharactersIntent) -> Unit) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Column(Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
         Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(onIntent, scrollBehavior) }
@@ -126,7 +124,6 @@ private fun Preview() {
         CharacterSimple(7,"Eric Stoltz Mask Morty", "Alive", "https://rickandmortyapi.com/api/character/avatar/6.jpeg"),
         CharacterSimple(8,"Abradolf Lincler", "Unknown", "https://rickandmortyapi.com/api/character/avatar/7.jpeg")
     )
-    val state = AllCharactersState(false)
     val data = flowOf(PagingData.from(characters)).collectAsLazyPagingItems()
-    RickAndMortyTheme { AllCharactersScreen(items = data,state) { } }
+    RickAndMortyTheme { AllCharactersScreen(items = data) { } }
 }

@@ -10,7 +10,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlin.time.Duration.Companion.milliseconds
 
-class QuerySearchCharactersViewModel(querySearchedCharactersUseCase: QueryCharactersUseCase) : BaseViewModel<QuerySearchCharactersState, QuerySearchCharactersIntent, QuerySearchCharactersEvent>() {
+class QuerySearchCharactersViewModel(querySearchedCharactersUseCase: QueryCharactersUseCase) : BaseViewModel<QuerySearchCharactersIntent, QuerySearchCharactersEvent>() {
     private val query = MutableStateFlow("")
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
@@ -19,7 +19,7 @@ class QuerySearchCharactersViewModel(querySearchedCharactersUseCase: QueryCharac
         .flatMapLatest { querySearchedCharactersUseCase(QueryCharactersUseCaseParams(it, viewModelScope)) }
         .cachedIn(viewModelScope)
 
-    override val state: StateFlow<QuerySearchCharactersState> = query
+    val state: StateFlow<QuerySearchCharactersState> = query
         .map { QuerySearchCharactersState(it) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), QuerySearchCharactersState(query.value))
 

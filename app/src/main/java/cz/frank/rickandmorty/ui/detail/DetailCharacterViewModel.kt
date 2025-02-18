@@ -17,7 +17,7 @@ class DetailCharacterViewModel(
     savedStateHandle: SavedStateHandle,
     getDetailCharacterUseCase: GetDetailCharacterUseCase,
     private val changeFavoriteStatusUseCase: ChangeFavoriteStatusUseCase,
-) : BaseViewModel<DetailCharacterState, DetailCharacterIntent, DetailCharacterEvent>() {
+) : BaseViewModel<DetailCharacterIntent, DetailCharacterEvent>() {
     private val status = MutableStateFlow(DetailCharacterState.Status())
 
     private val characterId = savedStateHandle.toRoute<DetailCharacterNavDestination>().id
@@ -29,7 +29,7 @@ class DetailCharacterViewModel(
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
-    override val state: StateFlow<DetailCharacterState> = combine(status, character) { status, character ->
+    val state: StateFlow<DetailCharacterState> = combine(status, character) { status, character ->
         DetailCharacterState(character, status)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), DetailCharacterState(character.value, status.value))
 
