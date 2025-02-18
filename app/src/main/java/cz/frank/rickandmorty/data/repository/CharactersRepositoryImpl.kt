@@ -48,8 +48,10 @@ class CharactersRepositoryImpl(
         ).flow.toDomain()
     }
 
-    override fun detailItem(id: Long): Flow<Result<Character>> = flow {
-        emit(remoteSource.getCharacter(id))
+    override fun detailItem(id: Long, refreshFlow: Flow<Unit>): Flow<Result<Character>> = flow {
+        refreshFlow.collect {
+            emit(remoteSource.getCharacter(id))
+        }
     }.combine(localSource.isFavorite(id)) { character, isFavorite ->
         character.map { it.copy(isFavorite = isFavorite) }
     }

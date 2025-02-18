@@ -10,6 +10,6 @@ interface CharactersRepository {
     fun pagedSearchItems(query: String, cacheInScope: CoroutineScope): Flow<PagingData<CharacterSimple>>
     fun pagedSearchItems(): Flow<PagingData<CharacterSimple>>
     fun favoriteItems(): Flow<PagingData<CharacterSimple>>
-    fun detailItem(id: Long): Flow<Result<Character>>
+    fun detailItem(id: Long, refreshFlow: Flow<Unit>): Flow<Result<Character>>
     suspend fun changeFavoriteStatus(id: Long, isFavorite: Boolean)
 }

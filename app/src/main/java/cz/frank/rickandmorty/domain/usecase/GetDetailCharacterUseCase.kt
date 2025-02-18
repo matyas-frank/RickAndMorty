@@ -5,8 +5,10 @@ import cz.frank.rickandmorty.domain.repository.CharactersRepository
 import cz.frank.rickandmorty.utils.UseCaseFlowWithParams
 import kotlinx.coroutines.flow.Flow
 
-interface GetDetailCharacterUseCase : UseCaseFlowWithParams<Long, Result<Character>>
+interface GetDetailCharacterUseCase : UseCaseFlowWithParams<GetDetailCharacterUseCaseParams, Result<Character>>
+
+data class GetDetailCharacterUseCaseParams(val id: Long, val refreshFlow: Flow<Unit>)
 
 class DetailCharacterUseCaseImpl(private val repository: CharactersRepository) : GetDetailCharacterUseCase {
-    override fun invoke(params: Long): Flow<Result<Character>> = repository.detailItem(params)
+    override fun invoke(params: GetDetailCharacterUseCaseParams): Flow<Result<Character>> = repository.detailItem(params.id, params.refreshFlow)
 }

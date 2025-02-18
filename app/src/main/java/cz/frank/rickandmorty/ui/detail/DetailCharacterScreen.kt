@@ -1,12 +1,14 @@
 package cz.frank.rickandmorty.ui.detail
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -20,7 +22,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -28,6 +29,7 @@ import cz.frank.rickandmorty.R
 import cz.frank.rickandmorty.domain.model.Character
 import cz.frank.rickandmorty.ui.detail.navigation.DetailCharacterNavDestination
 import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
+import cz.frank.rickandmorty.utils.ui.ErrorScreen
 import cz.frank.rickandmorty.utils.ui.ProcessEvents
 import cz.frank.rickandmorty.utils.ui.Space
 import io.github.fornewid.placeholder.foundation.PlaceholderHighlight
@@ -61,6 +63,38 @@ private fun DetailCharacterRoute(
 
 @Composable
 private fun DetailCharacterScreen(state: DetailCharacterState, onIntent: (DetailCharacterIntent) -> Unit) {
+    val uiState by rememberUpdatedState(state.status.getUIState())
+    AnimatedContent(targetState = uiState, label = "Detail character screen content animation") {
+        when (it) {
+            State.ERROR -> ErrorScreen(onRetry = { onIntent(DetailCharacterIntent.OnRefreshTapped) })
+            State.SUCCESS -> SuccessScreen(state, onIntent)
+            State.LOADING -> LoadingScreen()
+        }
+    }
+}
+
+private fun DetailCharacterState.Status.getUIState() = when {
+    loading -> State.LOADING
+    error -> State.ERROR
+    else -> State.SUCCESS
+}
+
+private enum class State {
+    SUCCESS, LOADING, ERROR
+}
+
+@Composable
+private fun LoadingScreen() {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+private fun SuccessScreen(
+    state: DetailCharacterState,
+    onIntent: (DetailCharacterIntent) -> Unit
+) {
     state.character?.let { character ->
         Scaffold(topBar = {
             Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(character.name, character.isFavorite, onIntent) }
@@ -69,7 +103,8 @@ private fun DetailCharacterScreen(state: DetailCharacterState, onIntent: (Detail
                 Modifier
                     .padding(it)
                     .zIndex(1f)
-                    .fillMaxSize()) {
+                    .fillMaxSize()
+            ) {
                 DetailCharacterContent(character)
             }
         }
