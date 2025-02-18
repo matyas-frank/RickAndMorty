@@ -57,7 +57,7 @@ private fun AllCharactersRoute(
             AllCharactersEvent.GoBack -> navHostController.navigateUp()
             is AllCharactersEvent.GoToDetail -> navHostController.navigate(DetailCharacterNavDestination(it.id))
             is AllCharactersEvent.GoToQuerySearch -> navHostController.navigate(QuerySearchedCharactersNavDestination)
-            is AllCharactersEvent.RetryRefresh -> items.retry()
+            is AllCharactersEvent.RetryRequest -> items.retry()
         }
     }
 
@@ -75,7 +75,7 @@ private fun AllCharactersScreen(items: LazyPagingItems<CharacterSimple>, onInten
             val uiState by rememberUpdatedState(getUIState(characters = items))
             AnimatedContent(uiState, label = "All characters screen content animation") {
                 when (it) {
-                    State.ERROR_AND_EMPTY -> ErrorScreen(onRetry = { onIntent(AllCharactersIntent.OnRetryTapped) })
+                    State.ERROR_AND_EMPTY -> ErrorScreen(onRetry = { onIntent(AllCharactersIntent.OnRefreshRetryTapped) })
                     State.SUCCESS -> NotEmptyScreen(items, onIntent)
                 }
             }
@@ -91,7 +91,7 @@ private fun NotEmptyScreen(
 ) {
     Column {
         AnimatedVisibility(items.loadState.refresh is LoadState.Error && items.itemCount != 0) {
-            Button(onClick = { onIntent(AllCharactersIntent.OnRetryTapped) }, Modifier.padding(Space.small).fillMaxWidth(), shape = MaterialTheme.shapes.medium) {
+            Button(onClick = { onIntent(AllCharactersIntent.OnRefreshRetryTapped) }, Modifier.padding(Space.small).fillMaxWidth(), shape = MaterialTheme.shapes.medium) {
                 Text(stringResource(R.string.all_characters_search_retry_refresh))
             }
         }
