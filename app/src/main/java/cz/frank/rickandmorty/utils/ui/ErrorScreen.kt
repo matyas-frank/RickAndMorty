@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -17,7 +18,7 @@ import cz.frank.rickandmorty.R
 
 @Composable
 fun ErrorScreen(onRetry: () -> Unit) {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(Modifier.fillMaxSize().testTag(ErrorScreen.SCREEN_TEST_TAG), contentAlignment = Alignment.Center) {
         Column(
             modifier = Modifier.padding(Space.medium),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -53,9 +54,15 @@ fun ErrorScreen(onRetry: () -> Unit) {
 
             Spacer(modifier = Modifier.height(Space.large))
 
-            Button(onClick = onRetry, shape = MaterialTheme.shapes.medium) {
+            Button(onClick = onRetry, Modifier.testTag(ErrorScreen.RETRY_BUTTON_TEST_TAG), shape = MaterialTheme.shapes.medium) {
                 Text(text = stringResource(R.string.error_screen_try_again))
             }
         }
     }
 }
+
+object ErrorScreen {
+    const val SCREEN_TEST_TAG = "ErrorScreen"
+    const val RETRY_BUTTON_TEST_TAG = "ErrorScreenTryAgainButton"
+}
+

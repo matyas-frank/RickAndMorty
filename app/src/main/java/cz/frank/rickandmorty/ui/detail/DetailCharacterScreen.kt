@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,7 +47,7 @@ fun NavGraphBuilder.detailCharacterNavDestination(
 }
 
 @Composable
-private fun DetailCharacterRoute(
+fun DetailCharacterRoute(
     navHostController: NavHostController,
     viewModel: DetailCharacterViewModel = koinViewModel()
 ) {
@@ -85,7 +86,7 @@ private enum class State {
 
 @Composable
 private fun LoadingScreen() {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(Modifier.fillMaxSize().testTag(DetailCharacterScreen.LOADING_TEST_TAG), contentAlignment = Alignment.Center) {
         CircularProgressIndicator()
     }
 }
@@ -96,9 +97,12 @@ private fun SuccessScreen(
     onIntent: (DetailCharacterIntent) -> Unit
 ) {
     state.character?.let { character ->
-        Scaffold(topBar = {
-            Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(character.name, character.isFavorite, onIntent) }
-        }) {
+        Scaffold(
+            Modifier.testTag(DetailCharacterScreen.SUCCESS_TEST_TAG),
+            topBar = {
+                Surface(Modifier.zIndex(2f), shadowElevation = 5.dp) { TopBar(character.name, character.isFavorite, onIntent) }
+            }
+        ) {
             Surface(
                 Modifier
                     .padding(it)
@@ -124,11 +128,15 @@ private fun TopBar(name: String, isFavorite: Boolean, onIntent: (DetailCharacter
             }
         },
         actions = {
-            IconToggleButton(isFavorite, onCheckedChange = { onIntent(DetailCharacterIntent.OnFavoriteTapped(it)) }) {
+            IconToggleButton(
+                isFavorite,
+                onCheckedChange = { onIntent(DetailCharacterIntent.OnFavoriteTapped(it)) },
+                Modifier.testTag(DetailCharacterScreen.TOGGLE_BUT_TEST_TAG)
+            ) {
                 if (isFavorite) {
-                    Icon(painterResource(R.drawable.ic_star), stringResource(R.string.detail_character_mark_not_favorite_description))
+                    Icon(painterResource(R.drawable.ic_star), stringResource(R.string.detail_character_mark_not_favorite_description), Modifier.testTag(DetailCharacterScreen.FAVORITE_ICON_TEST_TAG))
                 } else {
-                    Icon(painterResource(R.drawable.ic_star_empty), stringResource(R.string.detail_character_mark_favorite_description))
+                    Icon(painterResource(R.drawable.ic_star_empty), stringResource(R.string.detail_character_mark_favorite_description), Modifier.testTag(DetailCharacterScreen.NOT_FAVORITE_ICON_TEST_TAG))
                 }
             }
         }
@@ -209,4 +217,12 @@ private fun Preview() {
     val character = Character(1, "Rick Sanchez", "Alive", "https://rickandmortyapi.com/api/character/avatar/1.jpeg", true, "Human", "-", "Male", "Earth (C-137)", "Earth (Replacement Dimension)")
     val state = DetailCharacterState(character, status = DetailCharacterState.Status(loading = false))
     RickAndMortyTheme { DetailCharacterScreen(state) { } }
+}
+
+object DetailCharacterScreen {
+    const val SUCCESS_TEST_TAG = "CharacterSuccess"
+    const val LOADING_TEST_TAG = "CharacterLoading"
+    const val TOGGLE_BUT_TEST_TAG = "FavoriteToggle"
+    const val FAVORITE_ICON_TEST_TAG = "FavoriteIcon"
+    const val NOT_FAVORITE_ICON_TEST_TAG = "NotFavoriteIcon"
 }
