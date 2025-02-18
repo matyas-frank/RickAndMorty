@@ -39,7 +39,6 @@ fun NavGraphBuilder.detailCharacterNavDestination(
     navHostController: NavHostController,
 ) {
     composable<DetailCharacterNavDestination> {
-        val arg = it.toRoute<DetailCharacterNavDestination>()
         DetailCharacterRoute(navHostController)
     }
 }
