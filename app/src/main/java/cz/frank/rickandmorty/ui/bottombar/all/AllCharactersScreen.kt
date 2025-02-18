@@ -1,8 +1,11 @@
 package cz.frank.rickandmorty.ui.bottombar.all
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -31,6 +34,7 @@ import cz.frank.rickandmorty.ui.theme.RickAndMortyTheme
 import cz.frank.rickandmorty.utils.ui.CharacterList
 import cz.frank.rickandmorty.utils.ui.ErrorScreen
 import cz.frank.rickandmorty.utils.ui.ProcessEvents
+import cz.frank.rickandmorty.utils.ui.Space
 import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -72,11 +76,26 @@ private fun AllCharactersScreen(items: LazyPagingItems<CharacterSimple>, onInten
             AnimatedContent(uiState, label = "All characters screen content animation") {
                 when (it) {
                     State.ERROR_AND_EMPTY -> ErrorScreen(onRetry = { onIntent(AllCharactersIntent.OnRetryTapped) })
-                    State.SUCCESS -> CharacterList(items, onCharacterClick = { onIntent(AllCharactersIntent.OnItemTapped(it)) })
+                    State.SUCCESS -> NotEmptyScreen(items, onIntent)
                 }
             }
 
         }
+    }
+}
+
+@Composable
+private fun NotEmptyScreen(
+    items: LazyPagingItems<CharacterSimple>,
+    onIntent: (AllCharactersIntent) -> Unit
+) {
+    Column {
+        AnimatedVisibility(items.loadState.refresh is LoadState.Error && items.itemCount != 0) {
+            Button(onClick = { onIntent(AllCharactersIntent.OnRetryTapped) }, Modifier.padding(Space.small).fillMaxWidth(), shape = MaterialTheme.shapes.medium) {
+                Text(stringResource(R.string.all_characters_search_retry_refresh))
+            }
+        }
+        CharacterList(items, onCharacterClick = { onIntent(AllCharactersIntent.OnItemTapped(it)) })
     }
 }
 
