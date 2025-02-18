@@ -2,16 +2,14 @@ package cz.frank.rickandmorty.ui.bottombar.all
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -77,10 +75,18 @@ private fun AllCharactersScreen(items: LazyPagingItems<CharacterSimple>, onInten
                 when (it) {
                     State.ERROR_AND_EMPTY -> ErrorScreen(onRetry = { onIntent(AllCharactersIntent.OnRefreshRetryTapped) })
                     State.SUCCESS -> NotEmptyScreen(items, onIntent)
+                    State.LOADING_AND_EMPTY -> LoadingScreen()
                 }
             }
 
         }
+    }
+}
+
+@Composable
+private fun LoadingScreen() {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
     }
 }
 
@@ -127,11 +133,12 @@ private fun getUIState(
     characters: LazyPagingItems<CharacterSimple>,
 ): State = when {
     characters.loadState.refresh is LoadState.Error && characters.itemCount == 0 -> State.ERROR_AND_EMPTY
+    characters.loadState.refresh is LoadState.Loading && characters.itemCount == 0 -> State.LOADING_AND_EMPTY
     else -> State.SUCCESS
 }
 
 private enum class State {
-    ERROR_AND_EMPTY, SUCCESS
+    ERROR_AND_EMPTY, SUCCESS, LOADING_AND_EMPTY
 }
 
 
