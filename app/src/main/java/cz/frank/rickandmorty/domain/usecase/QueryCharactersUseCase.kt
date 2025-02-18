@@ -7,9 +7,7 @@ import cz.frank.rickandmorty.utils.UseCaseFlowWithParams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
-interface QueryCharactersUseCase : UseCaseFlowWithParams<QueryCharactersUseCaseParams,PagingData<CharacterSimple>> {
-    override operator fun invoke(params: QueryCharactersUseCaseParams): Flow<PagingData<CharacterSimple>>
-}
+interface QueryCharactersUseCase : UseCaseFlowWithParams<QueryCharactersUseCaseParams,PagingData<CharacterSimple>>
 
 class QueryCharactersUseCaseParams(val query: String, val cacheInScope: CoroutineScope)
 
