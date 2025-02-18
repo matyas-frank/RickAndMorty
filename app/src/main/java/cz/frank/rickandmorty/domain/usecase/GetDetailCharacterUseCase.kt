@@ -9,6 +9,6 @@ interface GetDetailCharacterUseCase : UseCaseFlowWithParams<GetDetailCharacterUs
 
 data class GetDetailCharacterUseCaseParams(val id: Long, val refreshFlow: Flow<Unit>)
 
-class DetailCharacterUseCaseImpl(private val repository: CharactersRepository) : GetDetailCharacterUseCase {
+class GetDetailCharacterUseCaseImpl(private val repository: CharactersRepository) : GetDetailCharacterUseCase {
     override fun invoke(params: GetDetailCharacterUseCaseParams): Flow<Result<Character>> = repository.detailItem(params.id, params.refreshFlow)
 }
