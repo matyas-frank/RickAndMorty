@@ -1,5 +1,6 @@
 package cz.frank.rickandmorty.ui.search
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.material3.SearchBarDefaults.InputField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -84,11 +86,12 @@ private fun QuerySearchCharactersScreen(
                 .fillMaxSize()
                 .padding(it)
         ) {
-            val uiState: State = getUIState(characters)
-
-            when (uiState) {
-                State.ERROR -> ErrorScreen(onRetry = { onIntent(QuerySearchCharactersIntent.OnRefreshRetryTapped) })
-                State.SUCCESS -> SuccessScreen(characters, state, onIntent)
+            val uiState by rememberUpdatedState(getUIState(characters))
+            AnimatedContent(uiState, label = "Query characters screen content animation") {
+                when (it) {
+                    State.ERROR -> ErrorScreen(onRetry = { onIntent(QuerySearchCharactersIntent.OnRefreshRetryTapped) })
+                    State.SUCCESS -> SuccessScreen(characters, state, onIntent)
+                }
             }
         }
     }
